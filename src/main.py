@@ -1,5 +1,5 @@
 """
- Copyright 2020 PeTrA. All rights reserved.
+ Copyright 2020~ PeTrA. All rights reserved.
  . Python Project Structure Repository;
 
  Probe Arrow Project by PeTrA. 2020
@@ -14,4 +14,16 @@
 """
 
 # ProbeArrow/src/main.py;
+from src.package import cui
+
+
+def main():
+    main_cui_engine = cui.Cui()
+    main_cui_engine.cui_engine()
+
+
+if __name__ == "__main__":
+    main()
+
+
 
