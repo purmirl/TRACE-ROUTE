@@ -26,6 +26,15 @@ class Cui():
             HIVE_MAIN_COMMAND = self.get_command("main")
             if HIVE_MAIN_COMMAND == "?":
                 self.print_main_option()
+                continue
+            elif HIVE_MAIN_COMMAND == "traceroute":
+                continue
+            elif HIVE_MAIN_COMMAND == "show":
+                continue
+            elif HIVE_MAIN_COMMAND == "exit":
+                break
+
+
 
 
     # option line
@@ -41,6 +50,17 @@ class Cui():
                       " 03. exit : program exit \n" \
                       ""
         print(MAIN_OPTION)
+        return
+
+    """ show option
+            version
+    """
+    def print_show_option(self):
+        SHOW_OPTION = "\n" \
+                      " 01. version : show software version \n" \
+                      " 02. quit : quit show option \n" \
+                      ""
+        print(SHOW_OPTION)
         return
 
     def print_rights(self):
