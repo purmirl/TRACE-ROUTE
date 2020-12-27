@@ -58,6 +58,7 @@ class Cui():
                         continue
                     elif HIVE_SHOW_COMMAND == "version":
                         # print software version
+                        self.print_software_version()
                         continue
                     elif HIVE_SHOW_COMMAND == "quit":
                         break
@@ -115,6 +116,13 @@ class Cui():
         print(IP_ERROR_STRING)
         return
 
+    def print_software_version(self):
+        SOFTWARE_VERSION_STRING = "\n" \
+                                  " ProbeArrow v 1.0 by PeTrA. 2020.DEC Updated.\n" \
+                                  ""
+        print(SOFTWARE_VERSION_STRING)
+        return
+
     def print_rights(self):
         print("Copyright 2020~ PeTrA. All rights reserved.")
         print("ProbeArrow 1.0\n")
@@ -123,5 +131,4 @@ class Cui():
     def get_command(self, _layer_name):
         result = ""
         result = input(_layer_name + "@probearrow:~# ")
-
         return result
