@@ -45,7 +45,8 @@ class Cui():
                             self.print_ip_error()
                             continue
                         ###########################################################################
-                        # here, traceroute function is needed.
+                        # here, traceroute function is needed.                                    #
+                        #                                                                         #
                         ###########################################################################
                         continue
                     continue
