@@ -15,6 +15,8 @@
 
 # ProbeArrow/src/probe.py;
 
+import collections
+
 class Probe():
 
     def __init__(self):
@@ -24,11 +26,25 @@ class Probe():
         self.probe_engine_min_icmp_ttl = 1
         self.probe_engine_max_icmp_ttl = 22
 
+        self.protocol_adrress_list = collections.deque()
+        return
 
+    def rest_value(self):
+        self.probe_engine_exception_key = 0
+        self.probe_engine_icmp_hit_count = 0
+        self.probe_engine_icmp_ttl_count = 1
+        self.probe_engine_min_icmp_ttl = 1
+        self.probe_engine_max_icmp_ttl = 22
+
+        self.protocol_adrress_list.clear()
         return
 
     def probe_engine(self, _protocol_address):
 
         # while True:
+
+        return
+
+    def probe_traceroute_get_result_ip(self):
 
         return
