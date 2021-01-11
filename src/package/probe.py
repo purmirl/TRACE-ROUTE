@@ -30,10 +30,10 @@ class Probe():
         self.result_total_node_count = 0
         self.result_protocol_address_list = collections.deque()
 
-        # class valuu
+        # class value
         self.probe_key = 0
 
-
+        """
         self.probe_engine_exception_key = 0
         self.probe_engine_icmp_hit_count = 0
         self.probe_engine_icmp_ttl_count = 1 # important
@@ -41,22 +41,26 @@ class Probe():
         self.traget_protocol_address = ""
 
         self.protocol_adrress_list = collections.deque()
+        """
         return
 
     def reset_value(self):
-        self.probe_engine_exception_key = 0
-        self.probe_engine_icmp_hit_count = 0
-        self.probe_engine_icmp_ttl_count = 1
-        self.probe_engine_min_icmp_ttl = 1
-        self.probe_engine_max_icmp_ttl = 22
+        # traceroute parameter value
+        self.traceroute_min_ttl = 1
+        self.traceroute_max_ttl = 22
+        self.traceroute_verbose = 0
+        self.traceroute_target_protocol_address = ""
 
-        self.traget_protocol_address = ""
+        # traceroute result value
+        self.result_total_node_count = 0
+        self.result_protocol_address_list = collections.deque()
 
-        self.protocol_adrress_list.clear()
+        # class value
+        self.probe_key = 0
         return
 
     def probe_engine(self, _protocol_address):
-
+        
         # while True:
 
         return
