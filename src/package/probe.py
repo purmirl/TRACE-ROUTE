@@ -17,6 +17,10 @@
 
 import collections
 
+from scapy.layers.inet import IP, ICMP
+from scapy.sendrecv import sr1
+
+
 class Probe():
 
     def __init__(self):
@@ -46,10 +50,10 @@ class Probe():
 
     def reset_value(self):
         # traceroute parameter value
-        self.traceroute_min_ttl = 1
-        self.traceroute_max_ttl = 22
-        self.traceroute_verbose = 0
         self.traceroute_target_protocol_address = ""
+        self.traceroute_max_ttl = 40
+        self.traceroute_verbose = 0
+        self.traceroute_timeout = 3
 
         # traceroute result value
         self.result_total_node_count = 0
@@ -57,11 +61,36 @@ class Probe():
 
         # class value
         self.probe_key = 0
+
         return
 
     def probe_engine(self, _protocol_address):
 
         # while True:
+
+        return
+
+    def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbos, _traceroute_timeout):
+        for current_ttl_value in range(1, _traceroute_max_ttl):
+            print(current_ttl_value, " hop..")
+            self.result_total_node_count = self.result_total_node_count + 1
+            send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
+            response_packet = sr1(send_packet, verbose = _traceroute_verbos, timeout = _traceroute_timeout)
+
+            if response_packet is not None:
+                if response_packet.type == 0:  # icmp echo reply
+                    print("finish !! " + response_packet.getlayer(IP).src)
+                    self.result_protocol_address_list.append(response_packet.getlayer(IP).src)
+                    break
+                else:
+                    print(response_packet.getlayer(IP).src)
+                    self.result_protocol_address_list.append(response_packet.getlayer(IP).src)
+
+
+        # result check area
+        print("result_total_node_count = ", self.result_total_node_count)
+        print("result_protocol_address_list", self.result_protocol_address_list)
 
         return
 

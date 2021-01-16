@@ -1,0 +1,39 @@
+Copyright 2021~ PeTrA. All rights reserved.
+Backup data.
+
+-------------- 20210116
+    # result, unans = traceroute(["github.com"], maxttl = 20, verbose = 0)
+
+    # result.show()
+    # print(result.show())
+    # result.summary()
+    # r = result.show()
+    # result.show()
+
+    target = "52.78.231.108"
+    max_ttl = 40
+    destination_port = 32323
+    verbose_value = 0
+    timeout_value = 3
+
+    for i in range(1, max_ttl):
+        print(i, " count..")
+        # send_packet = IP(dst = target, ttl = i) / UDP(dport = destination_port)
+        send_packet = IP(dst=target, ttl=i) / ICMP()
+        response_packet = sr1(send_packet, verbose = verbose_value, timeout = timeout_value)
+
+        if response_packet is not None:
+            if response_packet.type == 0: # icmp echo reply
+                print("finish !! " + response_packet.getlayer(IP).src)
+                break
+            else:
+                print(response_packet.getlayer(IP).src)
+        """
+        if response_packet is None:
+            break
+        elif response_packet.type == 3:
+            break
+        else:
+            print(i)
+        """
+-------------- 20210116

@@ -17,7 +17,7 @@
 from scapy.layers.inet import traceroute, UDP, IP, ICMP
 from scapy.sendrecv import sr1
 
-from src.package import cui
+from src.package import cui, probe
 
 import collections
 
@@ -25,41 +25,15 @@ def main():
     # main_cui_engine = cui.Cui()
     # main_cui_engine.cui_engine()
 
-    # result, unans = traceroute(["github.com"], maxttl = 20, verbose = 0)
+    # traceroute parameter value
+    traceroute_target_protocol_address = "github.com"
+    traceroute_max_ttl = 40
+    traceroute_verbose = 0
+    traceroute_timeout = 3
 
-    # result.show()
-    # print(result.show())
-    # result.summary()
-    # r = result.show()
-    # result.show()
-
-    target = "52.78.231.108"
-    max_ttl = 40
-    destination_port = 32323
-    verbose_value = 0
-    timeout_value = 3
-
-    for i in range(1, max_ttl):
-        print(i, " count..")
-        # send_packet = IP(dst = target, ttl = i) / UDP(dport = destination_port)
-        send_packet = IP(dst=target, ttl=i) / ICMP()
-        response_packet = sr1(send_packet, verbose = verbose_value, timeout = timeout_value)
-
-        if response_packet is not None:
-            if response_packet.type == 0: # icmp echo reply
-                print("finish !! " + response_packet.getlayer(IP).src)
-                break
-            else:
-                print(response_packet.getlayer(IP).src)
-        """
-        if response_packet is None:
-            break
-        elif response_packet.type == 3:
-            break
-        else:
-            print(i)
-        """
-
+    probe_check = probe.Probe()
+    probe_check.probe_traceroute(traceroute_target_protocol_address, traceroute_max_ttl,
+                                 traceroute_verbose, traceroute_timeout)
 
     return
 
