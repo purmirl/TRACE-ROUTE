@@ -72,29 +72,36 @@ class Probe():
 
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbos, _traceroute_timeout):
+        protocol_address_list = collections.deque()
         for current_ttl_value in range(1, _traceroute_max_ttl):
             print(current_ttl_value, " hop..")
-            self.result_total_node_count = self.result_total_node_count + 1
+            total_node_count = total_node_count + 1
             send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
             response_packet = sr1(send_packet, verbose = _traceroute_verbos, timeout = _traceroute_timeout)
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
                     print("finish !! " + response_packet.getlayer(IP).src)
-                    self.result_protocol_address_list.append(response_packet.getlayer(IP).src)
+                    protocol_address_list.append(response_packet.getlayer(IP).src)
                     break
                 else:
                     print(response_packet.getlayer(IP).src)
-                    self.result_protocol_address_list.append(response_packet.getlayer(IP).src)
+                    protocol_address_list.append(response_packet.getlayer(IP).src)
 
 
-        # result check area
-        print("result_total_node_count = ", self.result_total_node_count)
-        print("result_protocol_address_list", self.result_protocol_address_list)
+        # traceroute result check area
+        # print("result_total_node_count = ", total_node_count)
+        # print("result_protocol_address_list", protocol_address_list)
+
+        return total_node_count, protocol_address_list
+
+    def probe_node_location(self, _protocol_address_list = collections.deque()):
 
         return
 
+"""
     def probe_traceroute_get_result_ip(self):
 
         return
+"""
 
