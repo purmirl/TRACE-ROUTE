@@ -14,7 +14,7 @@
 """
 
 # ProbeArrow/src/main.py;
-from scapy.layers.inet import traceroute, UDP, IP
+from scapy.layers.inet import traceroute, UDP, IP, ICMP
 from scapy.sendrecv import sr1
 
 from src.package import cui
@@ -41,12 +41,14 @@ def main():
 
     for i in range(1, max_ttl):
         print(i, " count..")
-        send_packet = IP(dst = target, ttl = i) / UDP(dport = destination_port)
+        # send_packet = IP(dst = target, ttl = i) / UDP(dport = destination_port)
+        send_packet = IP(dst=target, ttl=i) / ICMP()
         response_packet = sr1(send_packet, verbose = verbose_value, timeout = timeout_value)
 
         if response_packet is not None:
-            if response_packet.type == 3:
+            if response_packet.type == 0: # icmp echo reply
                 print("finish !! " + response_packet.getlayer(IP).src)
+                break
             else:
                 print(response_packet.getlayer(IP).src)
         """
