@@ -28,21 +28,17 @@ def main():
     # main_cui_engine = cui.Cui()
     # main_cui_engine.cui_engine()
 
-    # ip location
-    GEO_IP_API_URL  = 'http://ip-api.com/json/'
+    url = "http://ip-api.com/json/"
+    target = "87.250.250.3"
 
-# Can be also site URL like this : 'google.com'
-    IP_TO_SEARCH = '87.250.250.3'
-
-    # Creating request object to GeoLocation API
-    req = urllib.request.Request(GEO_IP_API_URL+IP_TO_SEARCH)
-    # Getting in response JSON
-    response = urllib.request.urlopen(req).read()
-    # Loading JSON from text to object
-    json_response = json.loads(response.decode('utf-8'))
-
-    # Print country
-    print(json_response['country'])
+    try:
+        request = urllib.request.Request(url + target)
+        response = urllib.request.urlopen(request).read()
+        json_response = json.loads(response.decode("utf-8"))
+        print(json_response["country"])
+    except ConnectionResetError:
+        print("??")
+        return
 
 
     # traceroute parameter value
