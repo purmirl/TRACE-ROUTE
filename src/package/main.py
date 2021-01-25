@@ -14,32 +14,63 @@
 """
 
 # ProbeArrow/src/main.py;
-import json
-import urllib.request
+from pip._vendor import requests
 
-from scapy.layers.inet import traceroute, UDP, IP, ICMP
-from scapy.sendrecv import sr1
-
-from src.package import cui, probe
-
-import collections
 
 def main():
     # main_cui_engine = cui.Cui()
     # main_cui_engine.cui_engine()
 
     url = "http://ip-api.com/json/"
-    target = "87.250.250.3"
-
+    target = "121.121.121.121"
+    headers = {
+        "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"
+    }
     try:
-        request = urllib.request.Request(url + target)
-        response = urllib.request.urlopen(request).read()
-        json_response = json.loads(response.decode("utf-8"))
-        print(json_response["country"])
-    except ConnectionResetError:
-        print("??")
-        return
+        response = requests.get(url = url + target, headers = headers)
 
+    except ConnectionResetError:
+        pass
+
+    json_response = response.json()
+    print(json_response)
+
+
+
+    # try:
+    #     request = urllib.request.get(url + target)
+    #     response = urllib.request.urlopen(request).read()
+    #     json_response = json.loads(response.decode("utf-8"))
+    #     print(json_response["country"])
+    # except ConnectionResetError:
+    #
+    #     print("??")
+    #     return
+
+################################
+    # header = {
+    #     "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36",
+    #     "Accept-Encoding": "*",
+    #     "Connection": "keep-alive"
+    # }
+    # response = requests.get(url = url + target)
+    #
+    #
+    # json_response = response.json().get("country")
+    # print(json_response)
+################################
+
+    # user_agent = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+    # try:
+    #     request = urllib.request.get(url + target, headers = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"})
+    #     response = urllib.request.urlopen(request).read()
+    #     json_response = json.loads(response.decode("utf-8"))
+    #     print(json_response["country"])
+    # except ConnectionResetError:
+    #
+    #     print("??")
+    #     return
+################################
 
     # traceroute parameter value
 

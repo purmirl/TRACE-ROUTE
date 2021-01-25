@@ -17,6 +17,7 @@
 
 import collections
 
+from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
 
@@ -33,6 +34,7 @@ class Probe():
         # traceroute result value
         self.result_total_node_count = 0
         self.result_protocol_address_list = collections.deque()
+        self.result_location_list = collections.deque()
 
         # class value
         self.probe_key = 0
@@ -58,6 +60,7 @@ class Probe():
         # traceroute result value
         self.result_total_node_count = 0
         self.result_protocol_address_list = collections.deque()
+        self.result_location_list = collections.deque()
 
         # class value
         self.probe_key = 0
@@ -96,7 +99,19 @@ class Probe():
         return total_node_count, protocol_address_list
 
     def probe_node_location(self, _protocol_address_list = collections.deque()):
-
+        # probe_node_location function's value.
+        #     api_url : using api's url address
+        #     protocol_address : ip address
+        #     headers : http (tcp/80) request header
+        api_url = ""
+        protocol_address = ""
+        headers = {
+            ""
+        }
+        try:
+            response = requests.get(url = api_url + protocol_address, headers = headers)
+        except ConnectionResetError:
+            pass
 
         return
 
