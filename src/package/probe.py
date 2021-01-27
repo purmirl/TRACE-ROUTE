@@ -16,6 +16,7 @@
 # ProbeArrow/src/probe.py;
 
 import collections
+import time
 
 from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
@@ -73,22 +74,30 @@ class Probe():
 
         return
 
+    """ probe traceroute function
+    @:param
+        traceroute target protocol address
+        traceroute max ttl
+        traceroute verbos
+        traceroute timeout
+        deque :: protocol address list
+    """
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbos, _traceroute_timeout):
         protocol_address_list = collections.deque()
         for current_ttl_value in range(1, _traceroute_max_ttl):
-            print(current_ttl_value, " hop..")
+            # print(current_ttl_value, " hop..")
             total_node_count = total_node_count + 1
             send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
             response_packet = sr1(send_packet, verbose = _traceroute_verbos, timeout = _traceroute_timeout)
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
-                    print("finish !! " + response_packet.getlayer(IP).src)
+                    # print("finish !! " + response_packet.getlayer(IP).src)
                     protocol_address_list.append(response_packet.getlayer(IP).src)
                     break
                 else:
-                    print(response_packet.getlayer(IP).src)
+                    # print(response_packet.getlayer(IP).src)
                     protocol_address_list.append(response_packet.getlayer(IP).src)
 
 
@@ -98,22 +107,36 @@ class Probe():
 
         return total_node_count, protocol_address_list
 
+    """ probe node location function
+    @:param
+        deque :: protocol address list
+    @:api
+        http://ip-api.com/json/
+    """
     def probe_node_location(self, _protocol_address_list = collections.deque()):
-        # probe_node_location function's value.
-        #     api_url : using api's url address
-        #     protocol_address : ip address
-        #     headers : http (tcp/80) request header
-        api_url = ""
-        protocol_address = ""
-        headers = {
-            ""
-        }
-        try:
-            response = requests.get(url = api_url + protocol_address, headers = headers)
-        except ConnectionResetError:
-            pass
+        """ probe_node_location function's value.
+         api_url : using api's url address
+         protocol_address : ip address
+         headers : http (tcp/80) request header
+        """
+        location_list = collections.deque()
 
-        return
+        for i in range(0, self.result_total_node_count):
+            try:
+                api_url = "http://ip-api.com/json/"
+                protocol_address = _protocol_address_list[i]
+                headers = {
+                    ""
+                }
+                response = requests.get(url = api_url + protocol_address, headers = headers)
+                json_response = response.json()
+                location_list.append(json_response["country"])
+            except ConnectionResetError:
+                pass
+
+            time.sleep(0.5)
+
+        return location_list
 
 """
     def probe_traceroute_get_result_ip(self):
