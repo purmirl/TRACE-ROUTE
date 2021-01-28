@@ -187,9 +187,3 @@ class Probe():
     def probe_get_result_location_list(self):
         return self.result_location_list
 
-"""
-    def probe_traceroute_get_result_ip(self):
-
-        return
-"""
-
