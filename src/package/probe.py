@@ -78,18 +78,18 @@ class Probe():
     @:param
         traceroute target protocol address
         traceroute max ttl
-        traceroute verbos
+        traceroute verbose
         traceroute timeout
         deque :: protocol address list
     """
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbos, _traceroute_timeout):
+                         _traceroute_verbose, _traceroute_timeout):
         protocol_address_list = collections.deque()
         for current_ttl_value in range(1, _traceroute_max_ttl):
             # print(current_ttl_value, " hop..")
             total_node_count = total_node_count + 1
             send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
-            response_packet = sr1(send_packet, verbose = _traceroute_verbos, timeout = _traceroute_timeout)
+            response_packet = sr1(send_packet, verbose = _traceroute_verbose, timeout = _traceroute_timeout)
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
@@ -137,6 +137,55 @@ class Probe():
             time.sleep(0.5)
 
         return location_list
+
+    """ get result function
+    @:returns
+        protocol address list
+        location list
+        total node count
+    """
+    def probe_get_result(self):
+        return self.result_protocol_address_list, self.result_location_list, self.result_total_node_count
+
+    """ set-get zone
+    
+    """
+    def probe_set_traceroute_target_protocol_address(self, _traceroute_target_protocol_address):
+        self.traceroute_target_protocol_address = _traceroute_target_protocol_address
+        return
+
+    def probe_set_traceroute_max_ttl(self, _traceroute_max_ttl):
+        self.traceroute_max_ttl = _traceroute_max_ttl
+        return
+
+    def probe_set_traceroute_verbose(self, _traceroute_verbose):
+        self.traceroute_verbose = _traceroute_verbose
+        return
+
+    def probe_set_traceroute_timeout(self, _traceroute_timeout):
+        self.traceroute_timeout = _traceroute_timeout
+        return
+
+    def probe_get_traceroute_target_protocol_address(self):
+        return self.traceroute_target_protocol_address
+
+    def probe_get_traceroute_max_ttl(self):
+        return self.traceroute_max_ttl
+
+    def probe_get_traceroute_verbose(self):
+        return self.traceroute_verbose
+
+    def probe_get_traceroute_timeout(self):
+        return self.traceroute_timeout
+
+    def probe_get_result_total_node_count(self):
+        return self.result_total_node_count
+
+    def probe_get_result_protocol_address_list(self):
+        return self.result_protocol_address_list
+
+    def probe_get_result_location_list(self):
+        return self.result_location_list
 
 """
     def probe_traceroute_get_result_ip(self):
