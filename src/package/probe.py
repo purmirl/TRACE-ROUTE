@@ -22,7 +22,6 @@ from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
 
-
 class Probe():
 
     def __init__(self):
@@ -68,11 +67,28 @@ class Probe():
 
         return
 
-    def probe_engine(self, _protocol_address):
-
-        # while True:
-
-        return
+    """ probe class main engine function
+    @:param
+        traceroute target protocol address
+        traceroute max ttl
+        traceroute verbose
+        traceroute timeout
+    @:returns
+        deque :: protocol address list
+        deque :: protocol address location list
+    """
+    def probe_engine(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbose, _traceroute_timeout):
+        self.reset_value()
+        self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
+        self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
+        self.probe_set_traceroute_verbose(_traceroute_verbose)
+        self.probe_set_traceroute_timeout(_traceroute_timeout)
+        self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
+                              self.probe_get_traceroute_max_ttl(),
+                              self.probe_get_traceroute_verbose(),
+                              self.probe_get_traceroute_timeout())
+        return self.probe_get_result()
 
     """ probe traceroute function
     @:param
@@ -80,36 +96,31 @@ class Probe():
         traceroute max ttl
         traceroute verbose
         traceroute timeout
+    @:return
         deque :: protocol address list
     """
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbose, _traceroute_timeout):
         protocol_address_list = collections.deque()
         for current_ttl_value in range(1, _traceroute_max_ttl):
-            # print(current_ttl_value, " hop..")
             total_node_count = total_node_count + 1
             send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
             response_packet = sr1(send_packet, verbose = _traceroute_verbose, timeout = _traceroute_timeout)
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
-                    # print("finish !! " + response_packet.getlayer(IP).src)
                     protocol_address_list.append(response_packet.getlayer(IP).src)
                     break
                 else:
-                    # print(response_packet.getlayer(IP).src)
                     protocol_address_list.append(response_packet.getlayer(IP).src)
-
-
-        # traceroute result check area
-        # print("result_total_node_count = ", total_node_count)
-        # print("result_protocol_address_list", protocol_address_list)
 
         return total_node_count, protocol_address_list
 
     """ probe node location function
     @:param
         deque :: protocol address list
+    @:return
+        deque :: protocol address location list
     @:api
         http://ip-api.com/json/
     """
