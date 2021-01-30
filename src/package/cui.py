@@ -13,11 +13,13 @@
  @ cui.py
     * character user interface python code file
 """
+import timeit
+
+from src.package import probe
 from src.package.function import is_protocol_address
 
 
 class Cui():
-
     def __init__(self):
         return
 
@@ -41,13 +43,10 @@ class Cui():
                         break
                     else: # something is put.
                         is_ip_address = is_protocol_address(HIVE_TRACEROUTE_COMMAND)
-                        if is_ip_address == 0:
+                        if is_ip_address == 0: # not ip address
                             self.print_ip_error()
                             continue
-                        ###########################################################################
-                        # here, traceroute function is needed.                                    #
-                        #                                                                         #
-                        ###########################################################################
+                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 40, 0, 3) # trace route engine start
                         continue
                     continue
                 continue
@@ -70,10 +69,9 @@ class Cui():
             elif HIVE_MAIN_COMMAND == "exit":
                 break
 
-
-
-
-    # option line
+    """ cui print option zone
+    
+    """
     """ main option
             traceroute
             show
@@ -133,3 +131,37 @@ class Cui():
         result = ""
         result = input(_layer_name + "@probearrow:~# ")
         return result
+
+    """ cui traceroute engine zone
+    
+    """
+    """ run traceroute function
+    @:param
+        traceroute target protocol address
+        traceroute max ttl
+        traceroute verbose
+        traceroute timeout
+    """
+    def run_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbose, _traceroute_timeout):
+        start_time = timeit.default_timer()
+        probe_traceroute_instance = probe.Probe()
+        result_protocol_address_list, result_location_list, result_total_node_count = \
+            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbose, _traceroute_timeout)
+
+        for i in range(0, result_total_node_count):
+            result = ""
+            result = " Total nodes : " + str(result_total_node_count) + "\n" \
+                                                                      "\n" \
+                     " node " + str(i) + " : " + str(result_protocol_address_list[i]) + \
+                     " ( " + str(result_location_list[i]) + " )\n" \
+                                                            "\n" \
+                                                            ""
+        end_time = timeit.default_timer()
+        result = result + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds\n" \
+                                                                                                   "\n" \
+                                                                                                   ""
+        print(result)
+
+        return

@@ -64,3 +64,28 @@ Backup data.
 
         return total_node_count, protocol_address_list
 -------------- 20210130
+
+-------------- 20210130
+            elif HIVE_MAIN_COMMAND == "traceroute":
+                while True:
+                    HIVE_TRACEROUTE_COMMAND = self.get_command("traceroute")
+                    if HIVE_TRACEROUTE_COMMAND == "?":
+                        self.print_traceroute_option()
+                        continue
+                    elif HIVE_TRACEROUTE_COMMAND == "":
+                        continue
+                    elif HIVE_TRACEROUTE_COMMAND == "quit":
+                        break
+                    else: # something is put.
+                        is_ip_address = is_protocol_address(HIVE_TRACEROUTE_COMMAND)
+                        if is_ip_address == 0: # not ip address
+                            self.print_ip_error()
+                            continue
+                        ###########################################################################
+                        # here, traceroute function is needed.                                    #
+                        #                                                                         #
+                        ###########################################################################
+                        continue
+                    continue
+                continue
+-------------- 20210130
