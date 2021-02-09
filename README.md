@@ -26,4 +26,4 @@ The Probe Arrow's IP Location module is used the database of IP address's inform
 ![03](https://user-images.githubusercontent.com/33143731/107151607-cf662e80-69a6-11eb-89e9-7207aee422b6.png)   
 So, the Porbe Arrow process result is IP List (Trace route module's result) and IP Location (IP Location module's result). Now look about structure of Probe Arrow Program. To sum up, First start traceroute function. The function is print that ip list of middle nodes as L3 layer's equip or routing protocol's boundary point. That results is the parameter of the ip location function that will print the result of the ip address's physical location. That is.   
    
-   _@ made by purmirl.petra 2020 ~_
+@ _made by purmirl.petra 2020~_
