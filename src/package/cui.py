@@ -18,7 +18,6 @@ import timeit
 from src.package import probe
 from src.package.function import is_protocol_address
 
-
 class Cui():
     def __init__(self):
         return
@@ -117,7 +116,7 @@ class Cui():
 
     def print_software_version(self):
         SOFTWARE_VERSION_STRING = "\n" \
-                                  " ProbeArrow v 1.0 by PeTrA. 2020.DEC Updated.\n" \
+                                  " ProbeArrow v 1.0 by PeTrA. 2021.JAN Updated.\n" \
                                   ""
         print(SOFTWARE_VERSION_STRING)
         return
