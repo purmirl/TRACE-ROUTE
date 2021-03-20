@@ -39,15 +39,6 @@ class Probe():
         # class value
         self.probe_key = 0
 
-        """
-        self.probe_engine_exception_key = 0
-        self.probe_engine_icmp_hit_count = 0
-        self.probe_engine_icmp_ttl_count = 1 # important
-
-        self.traget_protocol_address = ""
-
-        self.protocol_adrress_list = collections.deque()
-        """
         return
 
     def reset_value(self):
