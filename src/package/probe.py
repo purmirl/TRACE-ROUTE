@@ -140,6 +140,11 @@ class Probe():
 
         return location_list
 
+    def probe_operation_system(self, _time_to_live):
+
+        return
+
+
     """ get result function
     @:returns
         protocol address list
