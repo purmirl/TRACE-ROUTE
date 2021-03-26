@@ -140,7 +140,18 @@ class Probe():
 
         return location_list
 
+    """ probe operation system function
+    @:param
+        time to live value (ttl)
+    @:return
+        ??
+    """
     def probe_operation_system(self, _time_to_live):
+        if (_time_to_live >= 62) and (_time_to_live <= 64):
+            print("os : Linux Series")
+        elif (_time_to_live >= 126) and (_time_to_live <= 128):
+            print("os : Windows Series")
+        elif (_time_to_live >= 254) and (_)
 
         return
 
