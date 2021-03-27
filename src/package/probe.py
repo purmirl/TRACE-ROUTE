@@ -146,15 +146,20 @@ class Probe():
     @:return
         ??
     """
-    def probe_operation_system(self, _time_to_live):
-        if (_time_to_live >= 62) and (_time_to_live <= 64):
+    def probe_operation_system(self, _time_to_live, _hop_count):
+        server_time_to_live = _time_to_live + _hop_count # icmp response ttl is os ttl - hop count
+        if (server_time_to_live >= 62) and (server_time_to_live <= 65):
             print("os : Linux Series")
-        elif (_time_to_live >= 126) and (_time_to_live <= 128):
+            return 1
+        elif (server_time_to_live >= 126) and (server_time_to_live <= 129):
             print("os : Windows Series")
-        elif (_time_to_live >= 254) and (_)
-
-        return
-
+            return 2
+        elif (server_time_to_live >= 254) and (server_time_to_live <= 257):
+            print("os : Cisco Series")
+            return 3
+        else:
+            print("null")
+            return 0
 
     """ get result function
     @:returns
