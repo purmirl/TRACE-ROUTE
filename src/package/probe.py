@@ -35,6 +35,7 @@ class Probe():
         self.result_total_node_count = 0
         self.result_protocol_address_list = collections.deque()
         self.result_location_list = collections.deque()
+        self.result_operation_system_list = collections.deque()
 
         # class value
         self.probe_key = 0
@@ -52,6 +53,7 @@ class Probe():
         self.result_total_node_count = 0
         self.result_protocol_address_list = collections.deque()
         self.result_location_list = collections.deque()
+        self.result_operation_system_list = collections.deque()
 
         # class value
         self.probe_key = 0
@@ -75,10 +77,11 @@ class Probe():
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
-                              self.probe_get_traceroute_max_ttl(),
-                              self.probe_get_traceroute_verbose(),
-                              self.probe_get_traceroute_timeout())
+        self.result_total_node_count, self.result_protocol_address_list = \
+            self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
+                                  self.probe_get_traceroute_max_ttl(),
+                                  self.probe_get_traceroute_verbose(),
+                                  self.probe_get_traceroute_timeout())
         return self.probe_get_result()
 
     """ probe traceroute function
@@ -93,6 +96,9 @@ class Probe():
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbose, _traceroute_timeout):
         protocol_address_list = collections.deque()
+        operation_system_list = collections.deque()
+
+        total_node_count = 0
         for current_ttl_value in range(1, _traceroute_max_ttl):
             total_node_count = total_node_count + 1
             send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
@@ -101,9 +107,13 @@ class Probe():
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
                     protocol_address_list.append(response_packet.getlayer(IP).src)
+                    operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
+                                                                             total_node_count))
                     break
                 else:
                     protocol_address_list.append(response_packet.getlayer(IP).src)
+                    operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
+                                                                             total_node_count))
 
         return total_node_count, protocol_address_list
 
@@ -149,17 +159,16 @@ class Probe():
     def probe_operation_system(self, _time_to_live, _hop_count):
         server_time_to_live = _time_to_live + _hop_count # icmp response ttl is os ttl - hop count
         if (server_time_to_live >= 62) and (server_time_to_live <= 65):
-            print("os : Linux Series")
-            return 1
+            # Linux Series Operation System
+            return "Linux Series"
         elif (server_time_to_live >= 126) and (server_time_to_live <= 129):
-            print("os : Windows Series")
-            return 2
+            # Windows Series Operation System
+            return "Windows Series"
         elif (server_time_to_live >= 254) and (server_time_to_live <= 257):
-            print("os : Cisco Series")
-            return 3
+            # Cisco Series Operation System
+            return "Cisco Series"
         else:
-            print("null")
-            return 0
+            return "null"
 
     """ get result function
     @:returns
@@ -168,7 +177,8 @@ class Probe():
         total node count
     """
     def probe_get_result(self):
-        return self.result_protocol_address_list, self.result_location_list, self.result_total_node_count
+        return self.result_protocol_address_list, self.result_operation_system_list, \
+               self.result_location_list, self.result_total_node_count
 
     """ set-get zone
     
