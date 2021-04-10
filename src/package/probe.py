@@ -153,6 +153,7 @@ class Probe():
     """ probe operation system function
     @:param
         time to live value (ttl)
+        
     @:return
         ??
     """
@@ -179,6 +180,22 @@ class Probe():
     def probe_get_result(self):
         return self.result_protocol_address_list, self.result_operation_system_list, \
                self.result_location_list, self.result_total_node_count
+
+    """ probe demo function
+    """
+    def probe_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbose, _traceroute_timeout):
+        self.reset_value()
+        self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
+        self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
+        self.probe_set_traceroute_verbose(_traceroute_verbose)
+        self.probe_set_traceroute_timeout(_traceroute_timeout)
+        self.result_total_node_count, self.result_protocol_address_list = \
+            self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
+                                  self.probe_get_traceroute_max_ttl(),
+                                  self.probe_get_traceroute_verbose(),
+                                  self.probe_get_traceroute_timeout())
+        return self.probe_get_result()
 
     """ set-get zone
     
