@@ -164,3 +164,8 @@ class Cui():
         print(result)
 
         return
+
+    def run_traceroute_demo(self, _traceroute_target_protocol_address, traceroute_max_ttl,
+                            _traceroute_verbos, _traceroute_timeout):
+
+        return
