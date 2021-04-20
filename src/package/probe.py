@@ -195,7 +195,7 @@ class Probe():
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
                                   self.probe_get_traceroute_timeout())
-        return self.probe_get_result_protocol_address_list(), self.result_operation_system_list # ip list, os result
+        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list() # ip list, os result
 
     """ set-get zone
     
@@ -236,4 +236,7 @@ class Probe():
 
     def probe_get_result_location_list(self):
         return self.result_location_list
+
+    def probe_get_result_operation_system_list(self):
+        return self.result_operation_system_list
 
