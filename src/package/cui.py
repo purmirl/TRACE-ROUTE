@@ -165,7 +165,25 @@ class Cui():
 
         return
 
-    def run_traceroute_demo(self, _traceroute_target_protocol_address, traceroute_max_ttl,
-                            _traceroute_verbos, _traceroute_timeout):
+    def run_traceroute_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                            _traceroute_verbose, _traceroute_timeout):
+        start_time = timeit.default_timer()
+        probe_traceroute_instance = probe.Probe()
+        result_protocol_address_list, result_location_list, result_total_node_count = \
+            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbose, _traceroute_timeout)
 
+        for i in range(0, result_total_node_count):
+            result = ""
+            result = result + " Total nodes : " + str(result_total_node_count) + "\n" \
+                                                                      "\n" \
+                     " node " + str(i) + " : " + str(result_protocol_address_list[i]) + \
+                     " ( " + str(result_location_list[i]) + " )\n" \
+                                                            "\n" \
+                                                            ""
+        end_time = timeit.default_timer()
+        result = result + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds\n" \
+                                                                                                   "\n" \
+                                                                                                   ""
+        print(result)
         return
