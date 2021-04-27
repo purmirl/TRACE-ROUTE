@@ -22,6 +22,7 @@ from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
 
+
 class Probe():
 
     def __init__(self):
@@ -70,8 +71,9 @@ class Probe():
         deque :: protocol address list
         deque :: protocol address location list
     """
+
     def probe_engine(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout):
+                     _traceroute_verbose, _traceroute_timeout):
         self.reset_value()
         self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
@@ -93,6 +95,7 @@ class Probe():
     @:return
         deque :: protocol address list
     """
+
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbose, _traceroute_timeout):
         protocol_address_list = collections.deque()
@@ -101,8 +104,8 @@ class Probe():
         total_node_count = 0
         for current_ttl_value in range(1, _traceroute_max_ttl):
             total_node_count = total_node_count + 1
-            send_packet = IP(dst = _traceroute_target_protocol_address, ttl = current_ttl_value) / ICMP()
-            response_packet = sr1(send_packet, verbose = _traceroute_verbose, timeout = _traceroute_timeout)
+            send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
+            response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout)
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
@@ -125,7 +128,8 @@ class Probe():
     @:api
         http://ip-api.com/json/
     """
-    def probe_node_location(self, _protocol_address_list = collections.deque()):
+
+    def probe_node_location(self, _protocol_address_list=collections.deque()):
         """ probe_node_location function's value.
          api_url : using api's url address
          protocol_address : ip address
@@ -140,7 +144,7 @@ class Probe():
                 headers = {
                     ""
                 }
-                response = requests.get(url = api_url + protocol_address, headers = headers)
+                response = requests.get(url=api_url + protocol_address, headers=headers)
                 json_response = response.json()
                 location_list.append(json_response["country"])
             except ConnectionResetError:
@@ -157,8 +161,9 @@ class Probe():
     @:return
         ??
     """
+
     def probe_operation_system(self, _time_to_live, _hop_count):
-        server_time_to_live = _time_to_live + _hop_count # icmp response ttl is os ttl - hop count
+        server_time_to_live = _time_to_live + _hop_count  # icmp response ttl is os ttl - hop count
         if (server_time_to_live >= 62) and (server_time_to_live <= 65):
             # Linux Series Operation System
             return "Linux Series"
@@ -177,14 +182,16 @@ class Probe():
         location list
         total node count
     """
+
     def probe_get_result(self):
         return self.result_protocol_address_list, self.result_operation_system_list, \
                self.result_location_list, self.result_total_node_count
 
     """ probe demo function
     """
+
     def probe_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout):
+                   _traceroute_verbose, _traceroute_timeout):
         self.reset_value()
         self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
@@ -195,11 +202,13 @@ class Probe():
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
                                   self.probe_get_traceroute_timeout())
-        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list() # ip list, os result
+        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
+               self.result_total_node_count  # ip list, os result
 
     """ set-get zone
     
     """
+
     def probe_set_traceroute_target_protocol_address(self, _traceroute_target_protocol_address):
         self.traceroute_target_protocol_address = _traceroute_target_protocol_address
         return
@@ -239,4 +248,3 @@ class Probe():
 
     def probe_get_result_operation_system_list(self):
         return self.result_operation_system_list
-

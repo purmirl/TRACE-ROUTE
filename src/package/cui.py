@@ -45,7 +45,7 @@ class Cui():
                         if is_ip_address == 0: # not ip address
                             self.print_ip_error()
                             continue
-                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 40, 0, 3) # trace route engine start
+                        self.run_traceroute_demo(HIVE_TRACEROUTE_COMMAND, 40, 0, 3) # trace route engine start
                         continue
                     continue
                 continue
@@ -146,7 +146,7 @@ class Cui():
         start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
         result_protocol_address_list, result_location_list, result_total_node_count = \
-            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
+            probe_traceroute_instance.probe_demo(_traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbose, _traceroute_timeout)
 
         for i in range(0, result_total_node_count):
