@@ -45,6 +45,7 @@ class Cui():
                         if is_ip_address == 0: # not ip address
                             self.print_ip_error()
                             continue
+                        print("breakpoint : " + HIVE_TRACEROUTE_COMMAND)
                         self.run_traceroute_demo(HIVE_TRACEROUTE_COMMAND, 40, 0, 3) # trace route engine start
                         continue
                     continue
@@ -169,16 +170,19 @@ class Cui():
                             _traceroute_verbose, _traceroute_timeout):
         start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
-        result_protocol_address_list, result_location_list, result_total_node_count = \
-            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
+        result_protocol_address_list, result_system_operation_list, result_total_node_count = \
+            probe_traceroute_instance.probe_demo(_traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbose, _traceroute_timeout)
 
-        for i in range(0, result_total_node_count):
+        print("breakpoint : " + str(len(result_protocol_address_list)))
+        print(result_total_node_count)
+        print(str(len(result_system_operation_list)))
+        for i in range(0, result_total_node_count - 1):
             result = ""
             result = result + " Total nodes : " + str(result_total_node_count) + "\n" \
                                                                       "\n" \
                      " node " + str(i) + " : " + str(result_protocol_address_list[i]) + \
-                     " ( " + str(result_location_list[i]) + " )\n" \
+                     " ( " + str(result_system_operation_list[i]) + " )\n" \
                                                             "\n" \
                                                             ""
         end_time = timeit.default_timer()

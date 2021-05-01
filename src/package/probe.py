@@ -79,7 +79,7 @@ class Probe():
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.result_total_node_count, self.result_protocol_address_list = \
+        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list = \
             self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
@@ -118,7 +118,7 @@ class Probe():
                     operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
                                                                              total_node_count))
 
-        return total_node_count, protocol_address_list
+        return total_node_count, protocol_address_list, operation_system_list
 
     """ probe node location function
     @:param
@@ -197,7 +197,7 @@ class Probe():
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.result_total_node_count, self.result_protocol_address_list = \
+        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list = \
             self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
