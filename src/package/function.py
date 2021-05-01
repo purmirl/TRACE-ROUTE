@@ -96,9 +96,11 @@ def is_protocol_address(_protocol_address):
     for i in range(1, length + 1):
         if _protocol_address[i - 1] == '.':
             dot_count += 1
-    if dot_count == 0 | dot_count > 3:
+    if dot_count != 3:
         result = 0
         return result
+
+    # print("dot count " + str(dot_count))
 
     # check continued dot
     # example : 127..0.0.1

@@ -117,6 +117,10 @@ class Probe():
                     protocol_address_list.append(response_packet.getlayer(IP).src)
                     operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
                                                                              total_node_count))
+            else:
+                protocol_address_list.append("Unknown IP")
+                operation_system_list.append("Unknown OS")
+
 
         return total_node_count, protocol_address_list, operation_system_list
 
@@ -174,7 +178,7 @@ class Probe():
             # Cisco Series Operation System
             return "Cisco Series"
         else:
-            return "null"
+            return "Unknown OS"
 
     """ get result function
     @:returns
