@@ -102,7 +102,7 @@ class Probe():
         operation_system_list = collections.deque()
 
         total_node_count = 0
-        for current_ttl_value in range(1, _traceroute_max_ttl):
+        for current_ttl_value in range(1, _traceroute_max_ttl + 1):
             total_node_count = total_node_count + 1
             send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
             response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout)
@@ -133,7 +133,7 @@ class Probe():
         http://ip-api.com/json/
     """
 
-    def probe_node_location(self, _protocol_address_list=collections.deque()):
+    def probe_node_location(self, _protocol_address_list = collections.deque()):
         """ probe_node_location function's value.
          api_url : using api's url address
          protocol_address : ip address

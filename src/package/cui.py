@@ -31,6 +31,7 @@ class Cui():
                 self.print_main_option()
                 continue
             elif HIVE_MAIN_COMMAND == "traceroute":
+                self.print_move_comments("main", "traceroute")
                 while True:
                     HIVE_TRACEROUTE_COMMAND = self.get_command("traceroute")
                     if HIVE_TRACEROUTE_COMMAND == "?":
@@ -39,6 +40,7 @@ class Cui():
                     elif HIVE_TRACEROUTE_COMMAND == "":
                         continue
                     elif HIVE_TRACEROUTE_COMMAND == "quit":
+                        self.print_move_comments("traceroute", "main")
                         break
                     else: # something is put.
                         is_ip_address = is_protocol_address(HIVE_TRACEROUTE_COMMAND)
@@ -51,6 +53,7 @@ class Cui():
                     continue
                 continue
             elif HIVE_MAIN_COMMAND == "show":
+                self.print_move_comments("main", "show")
                 while True:
                     HIVE_SHOW_COMMAND = self.get_command("show")
                     if HIVE_SHOW_COMMAND == "?":
@@ -61,6 +64,7 @@ class Cui():
                         self.print_software_version()
                         continue
                     elif HIVE_SHOW_COMMAND == "quit":
+                        self.print_move_comments("show", "main")
                         break
                     else:
                         continue
@@ -117,7 +121,7 @@ class Cui():
 
     def print_software_version(self):
         SOFTWARE_VERSION_STRING = "\n" \
-                                  " ProbeArrow v 1.0 by PeTrA. 2021.JAN Updated.\n" \
+                                  " ProbeArrow v 1.0 by PeTrA. 2021.MAY Updated.\n" \
                                   ""
         print(SOFTWARE_VERSION_STRING)
         return
@@ -125,6 +129,12 @@ class Cui():
     def print_rights(self):
         print("Copyright 2020~ PeTrA. All rights reserved.")
         print("ProbeArrow 1.0\n")
+        return
+
+    def print_move_comments(self, _from, _to):
+        MOVE_COMMENTS_STRING = "\n" \
+                               " move from " + str(_from) + " to " + str(_to) + "\n"
+        print(MOVE_COMMENTS_STRING)
         return
 
     def get_command(self, _layer_name):
