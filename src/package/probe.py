@@ -171,6 +171,8 @@ class Probe():
         if (server_time_to_live >= 62) and (server_time_to_live <= 65):
             # Linux Series Operation System
             return "Linux Series"
+        elif (sefver_time_to_live >= 58) and (server_time_to_live <= 61):
+            return "Cisco Series"
         elif (server_time_to_live >= 126) and (server_time_to_live <= 129):
             # Windows Series Operation System
             return "Windows Series"
