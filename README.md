@@ -7,7 +7,7 @@ _Copyright 2020~ PeTrA. All rights reserved._
 ![07](https://user-images.githubusercontent.com/33143731/118300033-76b1af00-b51c-11eb-88de-19a2ba4d4451.png)
 ## Dev Environment
 * _Language : Python3_   
-* _OS : Microfost Windows 10 64bits Operation_   
+* _OS : Microsoft Windows 10 64bits Operation_   
 * _IDE : JetBrains Pycharm Series_   
 * _Using Library : Python Scapy 2.4.3_   
 * _Using API : ip-api.com/json/ (TCP/80 HTTP)_
