@@ -18,6 +18,9 @@
 """
 
 # ProbeArrow/src/main.py;
+import json
+from urllib.request import Request, urlopen
+
 import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
@@ -71,15 +74,18 @@ def main():
     # main_cui_engine.cui_engine()
 
     # traceourte()
-    api_url = "https://ip-api.com/json/"
+
+    ######
+    api_url = "http://www.geoplugin.net/json.gp?ip="
     protocol_address = "8.8.8.8"
     url = api_url + protocol_address
-    print(url)
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
+    response = urlopen(url)
+    data = json.load(response)
+    # response = requests.get(url)
 
-    response = requests.get(url, headers = headers)
-    print(response)
+    print(data["geoplugin_countryName"])
+    ######
+
 
 if __name__ == "__main__":
     main()
