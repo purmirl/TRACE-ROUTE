@@ -24,6 +24,8 @@ from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
 
+from src.package.function import is_protocol_address
+
 
 class Probe():
 
@@ -81,12 +83,14 @@ class Probe():
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list = \
+        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list, \
+        self.result_location_list = \
             self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
                                   self.probe_get_traceroute_timeout())
-        return self.probe_get_result()
+        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
+               self.probe_get_result_total_node_count(), self.probe_get_result_location_list()
 
     """ probe traceroute function
     @:param
@@ -123,8 +127,8 @@ class Probe():
                 protocol_address_list.append("Unknown IP")
                 operation_system_list.append("Unknown OS")
 
-
-        return total_node_count, protocol_address_list, operation_system_list
+        return total_node_count, protocol_address_list, operation_system_list, \
+               self.probe_node_location(total_node_count, protocol_address_list)
 
     """ probe node location function
     @:param
@@ -135,22 +139,22 @@ class Probe():
         http://ip-api.com/json/
     """
 
-    def probe_node_location(self, _protocol_address_list = collections.deque()):
+    def probe_node_location(self, _total_node_count, _protocol_address_list=collections.deque()):
         """ probe_node_location function's value.
          api_url : using api's url address
          protocol_address : ip address
          headers : http (tcp/80) request header
         """
         location_list = collections.deque()
-        for i in range(0, self.result_total_node_count):
+        for i in range(0, _total_node_count):
             protocol_address = _protocol_address_list[i]
-            if protocol_address is not None:
+            is_ip_address = is_protocol_address(protocol_address)
+            if is_ip_address == 1:
                 try:
                     api_url = "http://www.geoplugin.net/json.gp?ip="
                     url = api_url + protocol_address
                     response = urlopen(url)
                     data = json.load(response)
-                    ip_location_string = str(data["geoplugin_countryName"])
                     location_list.append(str(data["geoplugin_countryName"]))
                 except ConnectionResetError:
                     pass
