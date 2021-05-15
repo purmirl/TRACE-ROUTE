@@ -1,30 +1,30 @@
 """
- ProbeArrow
  Copyright 2020~ PeTrA. All rights reserved.
  . Python Project Structure Repository;
 
- Probe Arrow Project by PeTrA. 2020~
+ Probe Arrow Project (Advanced Trace Route) by PeTrA. 2020~
  ProbeArrow 1.0
- Language : Python3.8.2
+ Language : Python3.8.2 on pycharm IDE
  Library : Scapy2.4.3
-
- Advanced Trace Route
+ API : IP Geo Location [geoplugin.net] --> http://www.geoplugin.net/json
  ------
  @ cui.py
-    * character user interface python code file
+    * ProbeArrow/src/package/cui.py
+    * console user interface code file
 """
-import timeit
 
+import timeit
 from src.package import probe
 from src.package.function import is_protocol_address
 
-class Cui():
+""" @Cui class
+"""
+class Cui:
     def __init__(self):
         return
 
     def cui_engine(self):
         self.print_rights()
-
         while True:
             HIVE_MAIN_COMMAND = self.get_command("main")
             if HIVE_MAIN_COMMAND == "?":
@@ -42,13 +42,13 @@ class Cui():
                     elif HIVE_TRACEROUTE_COMMAND == "quit":
                         self.print_move_comments("traceroute", "main")
                         break
-                    else: # something is put.
+                    else:  # something is put.
                         is_ip_address = is_protocol_address(HIVE_TRACEROUTE_COMMAND)
                         # print(is_ip_address)
-                        if is_ip_address == 0: # not ip address
+                        if is_ip_address == 0:  # not ip address
                             self.print_ip_error()
                             continue
-                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 40, 0, 3) # trace route engine start
+                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 40, 0, 3)  # trace route engine start
                         continue
                     continue
                 continue
@@ -72,11 +72,12 @@ class Cui():
                 continue
             elif HIVE_MAIN_COMMAND == "exit":
                 break
+        return
 
-    """ cui print option zone
-    
+    """ @cui print option zone
     """
-    """ main option
+
+    """ @main option
             traceroute
             show
             exit
@@ -90,7 +91,7 @@ class Cui():
         print(MAIN_OPTION)
         return
 
-    """ show option
+    """ @show option
             version
     """
     def print_show_option(self):
@@ -101,7 +102,7 @@ class Cui():
         print(SHOW_OPTION)
         return
 
-    """ traceroute option
+    """ @traceroute option
             [traget ip address]
     """
     def print_traceroute_option(self):
@@ -114,7 +115,7 @@ class Cui():
 
     def print_ip_error(self):
         IP_ERROR_STRING = "\n" \
-                          " This is not Internet Protocol address. \n"\
+                          " This is not Internet Protocol address. \n" \
                           ""
         print(IP_ERROR_STRING)
         return
@@ -142,10 +143,10 @@ class Cui():
         result = input(_layer_name + "@probearrow:~# ")
         return result
 
-    """ cui traceroute engine zone
-    
+    """ @cui traceroute engine zone
     """
-    """ run traceroute function
+
+    """ @run traceroute function
     @:param
         traceroute target protocol address
         traceroute max ttl
@@ -153,36 +154,39 @@ class Cui():
         traceroute timeout
     """
     def run_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout):
+                       _traceroute_verbose, _traceroute_timeout):
         start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
         result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location = \
             probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout)
+                                                   _traceroute_verbose, _traceroute_timeout)
         result = "\n"
         for i in range(0, result_total_node_count):
             result = result + " node " + str(i + 1) + " : " + str(result_protocol_address_list[i]) + \
                      " ( " + str(result_system_operation_list[i]) + " )" + " ( " + str(result_node_location[i]) + " )\n"
         end_time = timeit.default_timer()
         result = result + "\n" + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds)\n" \
-                                                                                                   " Total nodes : " + str(result_total_node_count) + "\n"
+                                                                                                          " Total nodes : " + str(
+            result_total_node_count) + "\n"
         print(result)
-
         return
 
+""" @demo trace route function. back up - 20210516
     def run_traceroute_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                             _traceroute_verbose, _traceroute_timeout):
         start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
         result_protocol_address_list, result_system_operation_list, result_total_node_count = \
             probe_traceroute_instance.probe_demo(_traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout)
+                                                 _traceroute_verbose, _traceroute_timeout)
         result = "\n"
         for i in range(0, result_total_node_count):
             result = result + " node " + str(i + 1) + " : " + str(result_protocol_address_list[i]) + \
                      " ( " + str(result_system_operation_list[i]) + " )\n"
         end_time = timeit.default_timer()
         result = result + "\n" + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds)\n" \
-                                                                                                   " Total nodes : " + str(result_total_node_count) + "\n"
+                                                                                                          " Total nodes : " + str(
+            result_total_node_count) + "\n"
         print(result)
         return
+"""

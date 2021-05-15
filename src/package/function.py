@@ -2,20 +2,18 @@
  Copyright 2020~ PeTrA. All rights reserved.
  . Python Project Structure Repository;
 
- Probe Arrow Project by PeTrA. 2020~
- MagicArrow 1.0
- Language : Python3.8.2
+ Probe Arrow Project (Advanced Trace Route) by PeTrA. 2020~
+ ProbeArrow 1.0
+ Language : Python3.8.2 on pycharm IDE
  Library : Scapy2.4.3
-
- Advanced Trace Route
+ API : IP Geo Location [geoplugin.net] --> http://www.geoplugin.net/json
  ------
  @ function.py
-    * function python code -> my utility function's code
+    * ProbeArrow/src/package/function.py
+    * utility function code file
 """
 
-# ProbeArrow/src/function.py
-
-""" parseProtocolAddress function
+""" @parseProtocolAddress function
         parse protocol address (ip address)
         :parameter
             _protocolAddress : ip address
@@ -55,7 +53,7 @@ def parse_protocol_address(_protocol_address):
     return result
 
 
-""" isProtocolAddress function
+""" @isProtocolAddress function
         check that is protocol address (ip address)
         :parameter
             _protocolAddress : ip address
@@ -145,5 +143,4 @@ def is_protocol_address(_protocol_address):
     elif (int(parse_result[3]) < 0) | (int(parse_result[3]) > 255):
         result = 0
         return result
-
     return result

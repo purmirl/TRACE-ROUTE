@@ -2,33 +2,27 @@
  Copyright 2020~ PeTrA. All rights reserved.
  . Python Project Structure Repository;
 
- Probe Arrow Project by PeTrA. 2020
+ Probe Arrow Project (Advanced Trace Route) by PeTrA. 2020~
  ProbeArrow 1.0
- Language : Python3.8.2
+ Language : Python3.8.2 on pycharm IDE
  Library : Scapy2.4.3
-
- Advanced Trace Route
+ API : IP Geo Location [geoplugin.net] --> http://www.geoplugin.net/json
  ------
- @ probe.py
-    * probe function code file
+ @ main.py
+    * ProbeArrow/src/package/probe.py
+    * probe (trace route module) code file
 """
-
-# ProbeArrow/src/probe.py;
 
 import collections
 import json
-import time
 from urllib.request import urlopen
-
-from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
-
 from src.package.function import is_protocol_address
 
-
-class Probe():
-
+""" @Probe class
+"""
+class Probe:
     def __init__(self):
         # traceroute parameter value
         self.traceroute_min_ttl = 1
@@ -44,7 +38,6 @@ class Probe():
 
         # class value
         self.probe_key = 0
-
         return
 
     def reset_value(self):
@@ -62,10 +55,9 @@ class Probe():
 
         # class value
         self.probe_key = 0
-
         return
 
-    """ probe class main engine function
+    """ @probe class main engine function
     @:param
         traceroute target protocol address
         traceroute max ttl
@@ -75,7 +67,6 @@ class Probe():
         deque :: protocol address list
         deque :: protocol address location list
     """
-
     def probe_engine(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                      _traceroute_verbose, _traceroute_timeout):
         self.reset_value()
@@ -92,7 +83,7 @@ class Probe():
         return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
                self.probe_get_result_total_node_count(), self.probe_get_result_location_list()
 
-    """ probe traceroute function
+    """ @probe traceroute function
     @:param
         traceroute target protocol address
         traceroute max ttl
@@ -101,7 +92,6 @@ class Probe():
     @:return
         deque :: protocol address list
     """
-
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                          _traceroute_verbose, _traceroute_timeout):
         protocol_address_list = collections.deque()
@@ -126,21 +116,19 @@ class Probe():
             else:
                 protocol_address_list.append("Unknown IP")
                 operation_system_list.append("Unknown OS")
-
         return total_node_count, protocol_address_list, operation_system_list, \
                self.probe_node_location(total_node_count, protocol_address_list)
 
-    """ probe node location function
+    """ @probe node location function
     @:param
         deque :: protocol address list
     @:return
         deque :: protocol address location list
     @:api
-        http://ip-api.com/json/
+        http://www.geoplugin.net/
     """
-
     def probe_node_location(self, _total_node_count, _protocol_address_list=collections.deque()):
-        """ probe_node_location function's value.
+        """ @probe_node_location function's value.
          api_url : using api's url address
          protocol_address : ip address
          headers : http (tcp/80) request header
@@ -164,19 +152,14 @@ class Probe():
                     pass
             else:
                 location_list.append("Unknown Location")
-
-            # time.sleep(0.5)
-
         return location_list
 
-    """ probe operation system function
+    """ @probe operation system function
     @:param
         time to live value (ttl)
-        
     @:return
         ??
     """
-
     def probe_operation_system(self, _time_to_live, _hop_count):
         server_time_to_live = _time_to_live + _hop_count  # icmp response ttl is os ttl - hop count
         if (server_time_to_live >= 62) and (server_time_to_live <= 65):
@@ -193,20 +176,17 @@ class Probe():
         else:
             return "Unknown OS"
 
-    """ get result function
+    """ @get result function
     @:returns
         protocol address list
         location list
         total node count
     """
-
     def probe_get_result(self):
         return self.result_protocol_address_list, self.result_operation_system_list, \
                self.result_location_list, self.result_total_node_count
 
-    """ probe demo function
-    """
-
+    """ @probe engine demo function. back up - 20210516
     def probe_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                    _traceroute_verbose, _traceroute_timeout):
         self.reset_value()
@@ -221,11 +201,10 @@ class Probe():
                                   self.probe_get_traceroute_timeout())
         return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
                self.result_total_node_count  # ip list, os result
-
-    """ set-get zone
-    
     """
 
+    """ @set-get zone
+    """
     def probe_set_traceroute_target_protocol_address(self, _traceroute_target_protocol_address):
         self.traceroute_target_protocol_address = _traceroute_target_protocol_address
         return
