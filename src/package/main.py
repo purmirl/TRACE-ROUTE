@@ -18,6 +18,7 @@
 """
 
 # ProbeArrow/src/main.py;
+import requests
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
 
@@ -66,10 +67,19 @@ def traceourte():
 """ main function
 """
 def main():
-    main_cui_engine = cui.Cui()
-    main_cui_engine.cui_engine()
-    # traceourte()
+    # main_cui_engine = cui.Cui()
+    # main_cui_engine.cui_engine()
 
+    # traceourte()
+    api_url = "https://ip-api.com/json/"
+    protocol_address = "8.8.8.8"
+    url = api_url + protocol_address
+    print(url)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
+
+    response = requests.get(url, headers = headers)
+    print(response)
 
 if __name__ == "__main__":
     main()
