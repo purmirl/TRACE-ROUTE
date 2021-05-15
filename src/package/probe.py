@@ -16,7 +16,9 @@
 # ProbeArrow/src/probe.py;
 
 import collections
+import json
 import time
+from urllib.request import urlopen
 
 from pip._vendor import requests
 from scapy.layers.inet import IP, ICMP
@@ -140,21 +142,22 @@ class Probe():
          headers : http (tcp/80) request header
         """
         location_list = collections.deque()
-
         for i in range(0, self.result_total_node_count):
-            try:
-                api_url = "http://ip-api.com/json/"
-                protocol_address = _protocol_address_list[i]
-                headers = {
-                    ""
-                }
-                response = requests.get(url=api_url + protocol_address, headers=headers)
-                json_response = response.json()
-                location_list.append(json_response["country"])
-            except ConnectionResetError:
-                pass
+            protocol_address = _protocol_address_list[i]
+            if protocol_address is not None:
+                try:
+                    api_url = "http://www.geoplugin.net/json.gp?ip="
+                    url = api_url + protocol_address
+                    response = urlopen(url)
+                    data = json.load(response)
+                    ip_location_string = str(data["geoplugin_countryName"])
+                    location_list.append(str(data["geoplugin_countryName"]))
+                except ConnectionResetError:
+                    pass
+            else:
+                location_list.append("Unknown Location")
 
-            time.sleep(0.5)
+            # time.sleep(0.5)
 
         return location_list
 

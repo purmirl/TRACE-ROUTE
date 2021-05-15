@@ -70,17 +70,19 @@ def traceourte():
 """ main function
 """
 def main():
-    # main_cui_engine = cui.Cui()
-    # main_cui_engine.cui_engine()
+    main_cui_engine = cui.Cui()
+    main_cui_engine.cui_engine()
 
     # traceourte()
 
     ######
+    """
     api_url = "http://www.geoplugin.net/json.gp?ip="
     protocol_address = "8.8.8.8"
     url = api_url + protocol_address
     response = urlopen(url)
     data = json.load(response)
+    """
     # response = requests.get(url)
 
     print(data["geoplugin_countryName"])
