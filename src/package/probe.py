@@ -155,7 +155,11 @@ class Probe():
                     url = api_url + protocol_address
                     response = urlopen(url)
                     data = json.load(response)
-                    location_list.append(str(data["geoplugin_countryName"]))
+                    location_string = str(data["geoplugin_countryName"])
+                    if location_string == "None":
+                        location_list.append("Unknown Location")
+                    else:
+                        location_list.append(location_string)
                 except ConnectionResetError:
                     pass
             else:
