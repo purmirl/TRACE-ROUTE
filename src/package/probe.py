@@ -153,17 +153,17 @@ class Probe:
         server_time_to_live = _time_to_live + _hop_count  # icmp response ttl is os ttl - hop count
         if (server_time_to_live >= 62) and (server_time_to_live <= 65):
             # Linux Series Operation System
-            return "Linux Series"
+            return "Linux Series", server_time_to_live
         elif (server_time_to_live >= 58) and (server_time_to_live <= 61):
-            return "Cisco Series"
+            return "Cisco Series", server_time_to_live
         elif (server_time_to_live >= 126) and (server_time_to_live <= 129):
             # Windows Series Operation System
-            return "Windows Series"
+            return "Windows Series", server_time_to_live
         elif (server_time_to_live >= 254) and (server_time_to_live <= 257):
             # Cisco Series Operation System
-            return "Cisco Series"
+            return "Cisco Series", server_time_to_live
         else:
-            return "Unknown OS"
+            return "Unknown OS", server_time_to_live
 
     """ @get result function
     @:returns
