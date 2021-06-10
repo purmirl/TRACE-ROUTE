@@ -85,6 +85,7 @@ class Probe:
                          _traceroute_verbose, _traceroute_timeout):
         protocol_address_list = collections.deque()
         operation_system_list = collections.deque()
+        server_ttl_list = collections.deque()
 
         total_node_count = 0
         for current_ttl_value in range(1, _traceroute_max_ttl + 1):
@@ -95,13 +96,25 @@ class Probe:
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
                     protocol_address_list.append(response_packet.getlayer(IP).src)
+                    operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
+                                                                             total_node_count)
+                    operation_system_list.append(operation_system)
+                    server_ttl_list.append(server_ttl)
+                    """
                     operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
                                                                              total_node_count))
+                                                                             """
                     break
                 else:
                     protocol_address_list.append(response_packet.getlayer(IP).src)
+                    operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
+                                                                             total_node_count)
+                    operation_system_list.append(operation_system)
+                    server_ttl_list.append(server_ttl)
+                    """
                     operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
                                                                              total_node_count))
+                                                                             """
             else:
                 protocol_address_list.append("Unknown IP")
                 operation_system_list.append("Unknown OS")
