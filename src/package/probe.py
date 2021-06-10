@@ -118,7 +118,8 @@ class Probe:
             else:
                 protocol_address_list.append("Unknown IP")
                 operation_system_list.append("Unknown OS")
-        return total_node_count, protocol_address_list, operation_system_list, \
+                server_ttl_list.append("Unknown TTL")
+        return total_node_count, protocol_address_list, operation_system_list, server_ttl_list, \
                self.probe_node_location(total_node_count, protocol_address_list)
 
     """ @probe node location function
