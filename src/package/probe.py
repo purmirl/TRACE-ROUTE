@@ -41,6 +41,7 @@ class Probe:
         self.result_protocol_address_list = collections.deque()
         self.result_location_list = collections.deque()
         self.result_operation_system_list = collections.deque()
+        self.result_server_ttl_list = collections.deque()
 
         # class value
         self.probe_key = 0
@@ -63,14 +64,12 @@ class Probe:
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list, \
-        self.result_location_list = \
-            self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
+        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list, self.result_location_list, self.result_server_ttl_list = self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
                                   self.probe_get_traceroute_timeout())
         return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
-               self.probe_get_result_total_node_count(), self.probe_get_result_location_list()
+               self.probe_get_result_total_node_count(), self.probe_get_result_location_list(), self.probe_get_result_server_ttl_list()
 
     """ @probe traceroute function
     @:param
@@ -247,3 +246,6 @@ class Probe:
 
     def probe_get_result_operation_system_list(self):
         return self.result_operation_system_list
+
+    def probe_get_result_server_ttl_list(self):
+        return self.result_server_ttl_list
