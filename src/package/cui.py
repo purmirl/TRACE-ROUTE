@@ -14,6 +14,9 @@
 """
 
 import timeit
+
+from scapy.arch import show_interfaces
+
 from src.package import probe
 from src.package.function import is_protocol_address
 
@@ -24,6 +27,8 @@ class Cui:
         return
 
     def cui_engine(self):
+        show_interfaces()
+        print("")
         self.print_rights()
         while True:
             HIVE_MAIN_COMMAND = self.get_command("main")
