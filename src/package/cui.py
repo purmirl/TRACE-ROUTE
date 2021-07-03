@@ -28,7 +28,9 @@ class Cui:
 
     def cui_engine(self):
         # show_interfaces()
-        self.get_interface_list()
+        # self.get_interface_list()
+        # print(self.show_interfaces())
+        print(self.get_interfaces())
         print("")
         self.print_rights()
         while True:
@@ -149,9 +151,12 @@ class Cui:
         result = input(_layer_name + "@probearrow:~# ")
         return result
 
-    def get_interface_list(self, _layer_name):
+    def get_interface_list(self):
         result = show_interfaces()
+
         return result
+
+
 
     """ @cui traceroute engine zone
     """
