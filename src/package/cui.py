@@ -15,7 +15,7 @@
 
 import timeit
 
-from scapy.arch import show_interfaces
+from scapy.arch import IFACES
 
 from src.package import probe
 from src.package.function import is_protocol_address
@@ -30,7 +30,8 @@ class Cui:
         # show_interfaces()
         # self.get_interface_list()
         # print(self.show_interfaces())
-        print(self.get_interfaces())
+        # print(self.get_interfaces())
+        # self.show_interfaces()
         print("")
         self.print_rights()
         while True:
@@ -151,11 +152,16 @@ class Cui:
         result = input(_layer_name + "@probearrow:~# ")
         return result
 
-    def get_interface_list(self):
-        result = show_interfaces()
+    # def get_interface_list(self):
+    #     result = show_interfaces()
 
+    #     return result
+
+    def show_interfaces(resolve_mac = True):
+        """Print list of available network interfaces"""
+        result = IFACES.show(resolve_mac)
+        print(result)
         return result
-
 
 
     """ @cui traceroute engine zone
