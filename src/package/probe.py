@@ -16,6 +16,8 @@
 import collections
 import json
 from urllib.request import urlopen
+
+from pip._vendor.distlib.compat import raw_input
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
 from src.package.function import is_protocol_address
@@ -35,6 +37,7 @@ class Probe:
         self.traceroute_max_ttl = 40
         self.traceroute_verbose = 0
         self.traceroute_timeout = 3
+        self.traceroute_interface = ""
 
         # traceroute result value
         self.result_total_node_count = 0
@@ -58,16 +61,18 @@ class Probe:
         deque :: protocol address location list
     """
     def probe_engine(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                     _traceroute_verbose, _traceroute_timeout):
+                     _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
         self.reset_value()
         self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
         self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
+        self.probe_set_traceroute_interface(_traceroute_interface)
         self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list, self.result_location_list, self.result_server_ttl_list = self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
-                                  self.probe_get_traceroute_timeout())
+                                  self.probe_get_traceroute_timeout(),
+                                  self.probe_get_traceroute_interface())
         return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
                self.probe_get_result_total_node_count(), self.probe_get_result_location_list(), self.probe_get_result_server_ttl_list()
 
@@ -81,16 +86,21 @@ class Probe:
         deque :: protocol address list
     """
     def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout):
+                         _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
         protocol_address_list = collections.deque()
         operation_system_list = collections.deque()
         server_ttl_list = collections.deque()
 
         total_node_count = 0
+        print("breakpoint")
         for current_ttl_value in range(1, _traceroute_max_ttl + 1):
             total_node_count = total_node_count + 1
             send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
-            response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout)
+            # print(str(_traceroute_interface))
+            print("breakpoint 1")
+            _iface = "Intel(R) Dual Band Wireless-AC 7265"
+            response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout, iface=r"Intel(R) Dual Band Wireless-AC 7265")
+            print("breakpoint 2")
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
@@ -223,6 +233,9 @@ class Probe:
         self.traceroute_timeout = _traceroute_timeout
         return
 
+    def probe_set_traceroute_interface(self, _traceroute_interface):
+        self.traceroute_interface = _traceroute_interface
+
     def probe_get_traceroute_target_protocol_address(self):
         return self.traceroute_target_protocol_address
 
@@ -234,6 +247,9 @@ class Probe:
 
     def probe_get_traceroute_timeout(self):
         return self.traceroute_timeout
+
+    def probe_get_traceroute_interface(self):
+        return self.traceroute_interface
 
     def probe_get_result_total_node_count(self):
         return self.result_total_node_count
