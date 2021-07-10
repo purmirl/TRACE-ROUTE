@@ -12,11 +12,8 @@
     * ProbeArrow/src/package/cui.py
     * console user interface code file
 """
-import json
 import timeit
-
 from scapy.arch import IFACES, show_interfaces
-
 from src.package import probe
 from src.package.function import is_protocol_address
 
@@ -27,61 +24,6 @@ class Cui:
         return
 
     def cui_engine(self):
-        show_interfaces()
-        # self.get_interface_list()
-        # print(self.show_interfaces())
-        # print(self.get_interfaces())
-        # self.show_interfaces()
-
-        # show_interfaces()
-        # result = IFACES.data
-        # print(result)
-        #
-        # lst = list(result.values())
-        # print(lst)
-        #
-        # print(lst[0])
-        # print()
-        #
-        # print()
-        # print(lst[0])
-        # mystr = str(lst[0])
-        # print()
-        # print(mystr[0])
-        #
-        # key = 0
-        # interface = ""
-        # for i in range(0, len(mystr)):
-        #     if (mystr[i] == "]"):
-        #         key = 0
-        #     if (key == 1):
-        #         interface = interface + mystr[i]
-        #     if (mystr[i] == "["):
-        #        key = 1
-        # print(interface)
-        #
-        #
-        #
-        # print()
-        # for i in range(0, len(lst)):
-        #     print(lst[i])
-
-
-        #
-        # print(type(result))
-        # print(result)
-        # print("")
-
-
-
-
-
-
-        ######
-
-        self.print_interfaces_list()
-        print(self.set_interfaces(2))
-
         self.print_rights()
         while True:
             HIVE_MAIN_COMMAND = self.get_command("main")
@@ -247,19 +189,6 @@ class Cui:
         result = interfaces
         return result
 
-
-    # def get_interface_list(self):
-    #     result = show_interfaces()
-
-    #     return result
-
-    # def show_interfaces(resolve_mac = True):
-    #     """Print list of available network interfaces"""
-    #     result = IFACES.show(resolve_mac)
-    #     print(result)
-    #     return result
-
-
     """ @cui traceroute engine zone
     """
 
@@ -276,13 +205,13 @@ class Cui:
         print(" traceroute operation proceeding...")
         start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
-        result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location = \
+        result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location, result_server_ttl_list = \
             probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
                                                    _traceroute_verbose, _traceroute_timeout, _traceroute_interface)
         result = "\n"
         for i in range(0, result_total_node_count):
             result = result + " node " + str(i + 1) + " : " + str(result_protocol_address_list[i]) + \
-                     " ( " + str(result_system_operation_list[i]) + " )" + " ( " + str(result_node_location[i]) + " )\n"
+                     " ( OS : " + str(result_system_operation_list[i]) + " )" + " ( GEO : " + str(result_node_location[i]) + " )" + " ( TTL : " + str(result_server_ttl_list[i]) + " )\n"
         end_time = timeit.default_timer()
         result = result + "\n" + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds)\n" \
                                                                                                           " Total nodes : " + str(
