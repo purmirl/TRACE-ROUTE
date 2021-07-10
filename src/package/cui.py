@@ -12,10 +12,10 @@
     * ProbeArrow/src/package/cui.py
     * console user interface code file
 """
-
+import json
 import timeit
 
-from scapy.arch import IFACES
+from scapy.arch import IFACES, show_interfaces
 
 from src.package import probe
 from src.package.function import is_protocol_address
@@ -32,7 +32,55 @@ class Cui:
         # print(self.show_interfaces())
         # print(self.get_interfaces())
         # self.show_interfaces()
-        print("")
+
+        # show_interfaces()
+        # result = IFACES.data
+        # print(result)
+        #
+        # lst = list(result.values())
+        # print(lst)
+        #
+        # print(lst[0])
+        # print()
+        #
+        # print()
+        # print(lst[0])
+        # mystr = str(lst[0])
+        # print()
+        # print(mystr[0])
+        #
+        # key = 0
+        # interface = ""
+        # for i in range(0, len(mystr)):
+        #     if (mystr[i] == "]"):
+        #         key = 0
+        #     if (key == 1):
+        #         interface = interface + mystr[i]
+        #     if (mystr[i] == "["):
+        #        key = 1
+        # print(interface)
+        #
+        #
+        #
+        # print()
+        # for i in range(0, len(lst)):
+        #     print(lst[i])
+
+
+        #
+        # print(type(result))
+        # print(result)
+        # print("")
+
+
+
+
+
+
+        ######
+
+        self.print_interfaces_list()
+
         self.print_rights()
         while True:
             HIVE_MAIN_COMMAND = self.get_command("main")
@@ -152,16 +200,36 @@ class Cui:
         result = input(_layer_name + "@probearrow:~# ")
         return result
 
+    def parsing_interface_name(self, _string):
+        _string = str(_string)
+        key = 0
+        interface = ""
+        for i in range(0, len(_string)):
+            if (_string[i] == "]"):
+                key = 0
+            if (key == 1):
+                interface = interface + _string[i]
+            if (_string[i] == "["):
+               key = 1
+        return interface
+
+    def print_interfaces_list(self):
+        interfaces_list = list((IFACES.data).values())
+        for i in range(0, len(interfaces_list)):
+            result = "" + str(i) + ". " + str(self.parsing_interface_name(interfaces_list[i]))
+            print(result)
+        return
+
     # def get_interface_list(self):
     #     result = show_interfaces()
 
     #     return result
 
-    def show_interfaces(resolve_mac = True):
-        """Print list of available network interfaces"""
-        result = IFACES.show(resolve_mac)
-        print(result)
-        return result
+    # def show_interfaces(resolve_mac = True):
+    #     """Print list of available network interfaces"""
+    #     result = IFACES.show(resolve_mac)
+    #     print(result)
+    #     return result
 
 
     """ @cui traceroute engine zone
