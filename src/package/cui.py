@@ -80,6 +80,7 @@ class Cui:
         ######
 
         self.print_interfaces_list()
+        print(self.set_interfaces(2))
 
         self.print_rights()
         while True:
@@ -105,6 +106,7 @@ class Cui:
                         if is_ip_address == 0:  # not ip address
                             self.print_ip_error()
                             continue
+                        self.config_set_interfaces()
                         self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 40, 0, 3)  # trace route engine start
                         continue
                     continue
@@ -200,25 +202,49 @@ class Cui:
         result = input(_layer_name + "@probearrow:~# ")
         return result
 
-    def parsing_interface_name(self, _string):
+    def parsing_interfaces_name(self, _string):
         _string = str(_string)
         key = 0
-        interface = ""
+        interfaces = ""
         for i in range(0, len(_string)):
             if (_string[i] == "]"):
                 key = 0
             if (key == 1):
-                interface = interface + _string[i]
+                interfaces = interfaces + _string[i]
             if (_string[i] == "["):
                key = 1
-        return interface
+        return interfaces
 
     def print_interfaces_list(self):
         interfaces_list = list((IFACES.data).values())
         for i in range(0, len(interfaces_list)):
-            result = "" + str(i) + ". " + str(self.parsing_interface_name(interfaces_list[i]))
+            result = " " + str(i + 1) + ". " + str(self.parsing_interfaces_name(interfaces_list[i]))
             print(result)
+        print()
         return
+
+    def set_interfaces(self, _index):
+        interfaces_list = list((IFACES.data).values())
+        interfaces = ""
+        for i in range(0, len(interfaces_list)):
+            if(i == (_index - 1)):
+                interfaces = self.parsing_interfaces_name(interfaces_list[i])
+                break
+        result = interfaces
+        return result
+
+    def config_set_interfaces(self):
+        COMMENTS = "\n" \
+                   " select internet interface ↓" \
+                   "\n" \
+                   ""
+        print(COMMENTS)
+        self.print_interfaces_list()
+        index = ""
+        index = input(" interface number : ")
+
+        return
+
 
     # def get_interface_list(self):
     #     result = show_interfaces()
