@@ -22,8 +22,7 @@ def main():
     main_cui_engine.cui_engine()
     return
 
-
 """ @call main
 """
 if __name__ == "__main__":
-    main()
+    main() # main function

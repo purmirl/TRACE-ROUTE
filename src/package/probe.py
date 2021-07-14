@@ -101,10 +101,6 @@ class Probe:
                                                                              total_node_count)
                     operation_system_list.append(operation_system)
                     server_ttl_list.append(server_ttl)
-                    """
-                    operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
-                                                                             total_node_count))
-                                                                             """
                     break
                 else:
                     protocol_address_list.append(response_packet.getlayer(IP).src)
@@ -112,10 +108,6 @@ class Probe:
                                                                              total_node_count)
                     operation_system_list.append(operation_system)
                     server_ttl_list.append(server_ttl)
-                    """
-                    operation_system_list.append(self.probe_operation_system(response_packet.getlayer(IP).ttl,
-                                                                             total_node_count))
-                                                                             """
             else:
                 protocol_address_list.append("Unknown")
                 operation_system_list.append("Unknown")
@@ -152,10 +144,10 @@ class Probe:
                         location_list.append("Unknown")
                     else:
                         location_list.append(location_string)
-                except ConnectionResetError:
-                    pass
+                except: # ConnectionResetError
+                    location_list.append("Unknown")
             else:
-                location_list.append("Unknown")
+                location_list.append("403 Error")
         return location_list
 
     """ @probe operation system function
