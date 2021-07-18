@@ -145,9 +145,9 @@ class Probe:
                     else:
                         location_list.append(location_string)
                 except: # ConnectionResetError
-                    location_list.append("Unknown")
+                    location_list.append("403 Error")
             else:
-                location_list.append("403 Error")
+                location_list.append("Unknown")
         return location_list
 
     """ @probe operation system function
@@ -200,6 +200,21 @@ class Probe:
     """
 
     """ @set-get zone
+    @:set : traceroute_target_protocol_address
+            traceroute_max_ttl
+            traceroute_verbose
+            traceroute_timeout
+            traceroute_interface
+    @:get : traceroute_target_protocol_address
+            traceroute_max_ttl
+            traceroute_verbose
+            traceroute_timeout
+            traceroute_interface
+            result_total_node_count
+            result_protocol_address_list
+            result_location_list
+            result_operation_system_list
+            result_server_ttl_list
     """
     def probe_set_traceroute_target_protocol_address(self, _traceroute_target_protocol_address):
         self.traceroute_target_protocol_address = _traceroute_target_protocol_address

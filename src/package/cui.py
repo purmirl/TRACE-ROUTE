@@ -13,7 +13,7 @@
     * console user interface code file
 """
 import timeit
-from scapy.arch import IFACES, show_interfaces
+from scapy.arch import IFACES
 from src.package import probe
 from src.package.function import is_protocol_address
 
@@ -23,6 +23,17 @@ class Cui:
     def __init__(self):
         return
 
+    """ @cui engine function
+    @:map
+        @:main
+            @:traceroute
+                @:ip address
+                @:quit
+            @:show
+                @:version
+                @:quit
+            @:exit
+    """
     def cui_engine(self):
         self.print_rights()
         while True:
