@@ -3,8 +3,14 @@ ProbeArrow
 **_ProbeArrow_ [Version 2105.01]** :: _The Advanced Trace Route_   
 _Copyright 2020~ PeTrA. All rights reserved._   
 ## Preview
-![08](https://user-images.githubusercontent.com/33143731/118501994-3a708f80-b764-11eb-9851-25cc3069c434.png)   
-![09](https://user-images.githubusercontent.com/33143731/118502028-43f9f780-b764-11eb-8437-38f56711ad37.png)
+* _main mode_   
+![20210714-01](https://user-images.githubusercontent.com/33143731/125615618-86a59a08-084e-4cdf-a9b4-e321e28d5f61.PNG)   
+* _show version_   
+![20210714-02](https://user-images.githubusercontent.com/33143731/125615825-7e6cf14a-1677-413d-8fa4-5d987bd3f7a2.PNG)   
+* _traceroute mode_   
+![20210714-03](https://user-images.githubusercontent.com/33143731/125615913-206a7fca-f72e-44cf-b1ad-82d65b1b8f77.PNG)   
+* _traceroute operation_   
+![20210714-04](https://user-images.githubusercontent.com/33143731/125616243-9d95dc52-1141-4535-b15a-83284c9d0ff1.PNG)
 ## Dev Environment
 * _Language : Python3_   
 * _OS : Microsoft Windows 10 64bits Operation_   
