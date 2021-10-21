@@ -67,13 +67,13 @@ class Probe:
         self.probe_set_traceroute_verbose(_traceroute_verbose)
         self.probe_set_traceroute_timeout(_traceroute_timeout)
         self.probe_set_traceroute_interface(_traceroute_interface)
-        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list, self.result_server_ttl_list, self.result_location_list = self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
+        """self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list, self.result_server_ttl_list, self.result_location_list = """
+        self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
                                   self.probe_get_traceroute_max_ttl(),
                                   self.probe_get_traceroute_verbose(),
                                   self.probe_get_traceroute_timeout(),
                                   self.probe_get_traceroute_interface())
-        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
-               self.probe_get_result_total_node_count(), self.probe_get_result_location_list(), self.probe_get_result_server_ttl_list()
+        return # self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), self.probe_get_result_total_node_count(), self.probe_get_result_location_list(), self.probe_get_result_server_ttl_list()
 
     """ @probe traceroute function
     @:param
@@ -129,8 +129,7 @@ class Probe:
         end_time = timeit.default_timer()
         probe_time = end_time - start_time
         self.probe_print_result_overall(probe_time, total_node_count)
-        return total_node_count, protocol_address_list, operation_system_list, server_ttl_list, \
-               self.probe_node_location(total_node_count, protocol_address_list)
+        return # total_node_count, protocol_address_list, operation_system_list, server_ttl_list, self.probe_node_location(total_node_count, protocol_address_list)
 
     """ @probe node location function
     @:param

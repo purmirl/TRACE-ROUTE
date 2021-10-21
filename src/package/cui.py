@@ -60,7 +60,7 @@ class Cui:
                             self.print_ip_error()
                             continue
                         interface = self.config_set_interfaces()
-                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 40, 0, 3, interface)  # trace route engine start
+                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 30, 0, 3, interface)  # trace route engine start
                         continue
                     continue
                 continue
@@ -215,10 +215,8 @@ class Cui:
         print()
         print(" traceroute operation proceeding...")
         print()
-        start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
-        result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location, result_server_ttl_list = \
-            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
+        probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
                                                    _traceroute_verbose, _traceroute_timeout, _traceroute_interface)
         return
 
