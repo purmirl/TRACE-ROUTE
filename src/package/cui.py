@@ -214,6 +214,20 @@ class Cui:
                        _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
         print()
         print(" traceroute operation proceeding...")
+        print()
+        start_time = timeit.default_timer()
+        probe_traceroute_instance = probe.Probe()
+        result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location, result_server_ttl_list = \
+            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
+                                                   _traceroute_verbose, _traceroute_timeout, _traceroute_interface)
+        return
+
+""" @cui run traceroute function. backup - 20211021
+    def run_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                       _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
+        print()
+        print(" traceroute operation proceeding...")
+        print()
         start_time = timeit.default_timer()
         probe_traceroute_instance = probe.Probe()
         result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location, result_server_ttl_list = \
@@ -227,9 +241,9 @@ class Cui:
         result = result + "\n" + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds)\n" \
                                                                                                           " Total nodes : " + str(
             result_total_node_count) + "\n"
-        print(result)
+        # print(result)
         return
-
+"""
 """ @demo trace route function. back up - 20210516
     def run_traceroute_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
                             _traceroute_verbose, _traceroute_timeout):

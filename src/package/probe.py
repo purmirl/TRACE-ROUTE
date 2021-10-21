@@ -15,6 +15,7 @@
 
 import collections
 import json
+import timeit
 from urllib.request import urlopen
 from scapy.layers.inet import IP, ICMP
 from scapy.sendrecv import sr1
@@ -89,6 +90,7 @@ class Probe:
         operation_system_list = collections.deque()
         server_ttl_list = collections.deque()
         total_node_count = 0
+        start_time = timeit.default_timer()
         for current_ttl_value in range(1, _traceroute_max_ttl + 1):
             total_node_count = total_node_count + 1
             send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
@@ -96,22 +98,37 @@ class Probe:
 
             if response_packet is not None:
                 if response_packet.type == 0:  # icmp echo reply
-                    protocol_address_list.append(response_packet.getlayer(IP).src)
+                    protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
+                    protocol_address = response_packet.getlayer(IP).src
                     operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
                                                                              total_node_count)
-                    operation_system_list.append(operation_system)
+                    operation_system_list.append(operation_system) # operation system
                     server_ttl_list.append(server_ttl)
+                    node_location = self.probe_check_location(str(protocol_address))
+                    self.probe_print_result_step_by_step(str(protocol_address), str(operation_system),
+                                                         str(node_location), str(server_ttl), str(total_node_count))
                     break
                 else:
-                    protocol_address_list.append(response_packet.getlayer(IP).src)
+                    protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
+                    protocol_address = response_packet.getlayer(IP).src
                     operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
                                                                              total_node_count)
-                    operation_system_list.append(operation_system)
+                    operation_system_list.append(operation_system) # operation system
                     server_ttl_list.append(server_ttl)
+                    node_location = self.probe_check_location(str(protocol_address))
             else:
+                protocol_address = "Unknown"
+                operation_system = "Unknown"
+                server_ttl = "Unknown"
                 protocol_address_list.append("Unknown")
                 operation_system_list.append("Unknown")
                 server_ttl_list.append("Unknown")
+                node_location = self.probe_check_location(str(protocol_address))
+            self.probe_print_result_step_by_step(str(protocol_address), str(operation_system), str(node_location),
+                                                 str(server_ttl), str(total_node_count))
+        end_time = timeit.default_timer()
+        probe_time = end_time - start_time
+        self.probe_print_result_overall(probe_time, total_node_count)
         return total_node_count, protocol_address_list, operation_system_list, server_ttl_list, \
                self.probe_node_location(total_node_count, protocol_address_list)
 
@@ -182,22 +199,41 @@ class Probe:
         return self.result_protocol_address_list, self.result_operation_system_list, \
                self.result_location_list, self.result_total_node_count, self.result_server_ttl_list
 
-    """ @probe engine demo function. back up - 20210516
-    def probe_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                   _traceroute_verbose, _traceroute_timeout):
-        self.reset_value()
-        self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
-        self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
-        self.probe_set_traceroute_verbose(_traceroute_verbose)
-        self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list = \
-            self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
-                                  self.probe_get_traceroute_max_ttl(),
-                                  self.probe_get_traceroute_verbose(),
-                                  self.probe_get_traceroute_timeout())
-        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
-               self.result_total_node_count  # ip list, os result
+    ## Renewal Zone : Print Result Step By Step ##
+
+    """ @print result step by step function
     """
+    def probe_print_result_step_by_step(self, _result_protocol_address, _result_operation_system, _result_location, _result_server_ttl, _result_node_number):
+        result = " node " + str(_result_node_number) + ", IP : " + str(_result_protocol_address) + " / OS : " + str(_result_operation_system) + " / GEO : " + str(_result_location) + " / TTL : " + str(_result_server_ttl)
+        print(result)
+        return
+
+    def probe_check_location(self, _result_protocol_address):
+        is_ip_address = is_protocol_address(_result_protocol_address)
+        result = ""
+        if is_ip_address == 1:
+            try:
+                api_url = "http://www.geoplugin.net/json.gp?ip="
+                url = api_url + str(_result_protocol_address)
+                response = urlopen(url)
+                data = json.load(response)
+                location_string = str(data["geoplugin_countryName"])
+                if location_string == "None":
+                    result = "Unknown"
+                else:
+                    result = str(location_string)
+            except: # ConnectionResetError
+                result = "403 Error"
+        else:
+            result = "Unknown"
+        return result
+
+    def probe_print_result_overall(self, _probe_time, _total_node_count):
+        result = "\n" \
+                 " probe engine terminated (probe time : " + str(_probe_time) + " seconds)\n" \
+                 " Total nodes : " + str(_total_node_count) + "\n"
+        print(result)
+        return
 
     """ @set-get zone
     @:set : traceroute_target_protocol_address
@@ -264,3 +300,54 @@ class Probe:
 
     def probe_get_result_server_ttl_list(self):
         return self.result_server_ttl_list
+
+    """ @probe engine demo function. back up - 20210516
+    def probe_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                   _traceroute_verbose, _traceroute_timeout):
+        self.reset_value()
+        self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
+        self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
+        self.probe_set_traceroute_verbose(_traceroute_verbose)
+        self.probe_set_traceroute_timeout(_traceroute_timeout)
+        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list = \
+            self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
+                                  self.probe_get_traceroute_max_ttl(),
+                                  self.probe_get_traceroute_verbose(),
+                                  self.probe_get_traceroute_timeout())
+        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
+               self.result_total_node_count  # ip list, os result
+    """
+
+    """ @probe traceroute function. back up - 20211020
+    def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
+                         _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
+        protocol_address_list = collections.deque()
+        operation_system_list = collections.deque()
+        server_ttl_list = collections.deque()
+        total_node_count = 0
+        for current_ttl_value in range(1, _traceroute_max_ttl + 1):
+            total_node_count = total_node_count + 1
+            send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
+            response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout, iface=_traceroute_interface)
+
+            if response_packet is not None:
+                if response_packet.type == 0:  # icmp echo reply
+                    protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
+                    operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
+                                                                             total_node_count)
+                    operation_system_list.append(operation_system) # operation system
+                    server_ttl_list.append(server_ttl)
+                    break
+                else:
+                    protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
+                    operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
+                                                                             total_node_count)
+                    operation_system_list.append(operation_system) # operation system
+                    server_ttl_list.append(server_ttl)
+            else:
+                protocol_address_list.append("Unknown")
+                operation_system_list.append("Unknown")
+                server_ttl_list.append("Unknown")
+        return total_node_count, protocol_address_list, operation_system_list, server_ttl_list, \
+               self.probe_node_location(total_node_count, protocol_address_list)
+    """
