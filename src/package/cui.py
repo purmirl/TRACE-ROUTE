@@ -12,7 +12,6 @@
     * ProbeArrow/src/package/cui.py
     * console user interface code file
 """
-import timeit
 from scapy.arch import IFACES
 from src.package import probe
 from src.package.function import is_protocol_address
