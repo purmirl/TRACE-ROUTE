@@ -133,7 +133,7 @@ class Cui:
 
     def print_software_version(self):
         SOFTWARE_VERSION_STRING = "\n" \
-                                  " ProbeArrow v 1.0 by PeTrA. 2021.JULY Updated.\n" \
+                                  " ProbeArrow v 21.11.01 by PeTrA. 2021.NOVEMBER Updated.\n" \
                                   ""
         print(SOFTWARE_VERSION_STRING)
         return
