@@ -96,7 +96,7 @@ class Probe:
             send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
             response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout, iface=_traceroute_interface)
 
-            if response_packet is not None:
+            if response_packet is not None: # arrive target
                 if response_packet.type == 0:  # icmp echo reply
                     protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
                     protocol_address = response_packet.getlayer(IP).src
@@ -108,7 +108,7 @@ class Probe:
                     self.probe_print_result_step_by_step(str(protocol_address), str(operation_system),
                                                          str(node_location), str(server_ttl), str(total_node_count))
                     break
-                else:
+                else: # not target
                     protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
                     protocol_address = response_packet.getlayer(IP).src
                     operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
@@ -116,7 +116,7 @@ class Probe:
                     operation_system_list.append(operation_system) # operation system
                     server_ttl_list.append(server_ttl)
                     node_location = self.probe_check_location(str(protocol_address))
-            else:
+            else: # not receive packet
                 protocol_address = "Unknown"
                 operation_system = "Unknown"
                 server_ttl = "Unknown"
@@ -207,6 +207,12 @@ class Probe:
         print(result)
         return
 
+    """ @check location geo
+    @:param
+        result protocol address : ip address
+    @:return
+        geo / unknown / 403
+    """
     def probe_check_location(self, _result_protocol_address):
         is_ip_address = is_protocol_address(_result_protocol_address)
         result = ""
@@ -299,54 +305,3 @@ class Probe:
 
     def probe_get_result_server_ttl_list(self):
         return self.result_server_ttl_list
-
-    """ @probe engine demo function. back up - 20210516
-    def probe_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                   _traceroute_verbose, _traceroute_timeout):
-        self.reset_value()
-        self.probe_set_traceroute_target_protocol_address(_traceroute_target_protocol_address)
-        self.probe_set_traceroute_max_ttl(_traceroute_max_ttl)
-        self.probe_set_traceroute_verbose(_traceroute_verbose)
-        self.probe_set_traceroute_timeout(_traceroute_timeout)
-        self.result_total_node_count, self.result_protocol_address_list, self.result_operation_system_list = \
-            self.probe_traceroute(self.probe_get_traceroute_target_protocol_address(),
-                                  self.probe_get_traceroute_max_ttl(),
-                                  self.probe_get_traceroute_verbose(),
-                                  self.probe_get_traceroute_timeout())
-        return self.probe_get_result_protocol_address_list(), self.probe_get_result_operation_system_list(), \
-               self.result_total_node_count  # ip list, os result
-    """
-
-    """ @probe traceroute function. back up - 20211020
-    def probe_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                         _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
-        protocol_address_list = collections.deque()
-        operation_system_list = collections.deque()
-        server_ttl_list = collections.deque()
-        total_node_count = 0
-        for current_ttl_value in range(1, _traceroute_max_ttl + 1):
-            total_node_count = total_node_count + 1
-            send_packet = IP(dst=_traceroute_target_protocol_address, ttl=current_ttl_value) / ICMP()
-            response_packet = sr1(send_packet, verbose=_traceroute_verbose, timeout=_traceroute_timeout, iface=_traceroute_interface)
-
-            if response_packet is not None:
-                if response_packet.type == 0:  # icmp echo reply
-                    protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
-                    operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
-                                                                             total_node_count)
-                    operation_system_list.append(operation_system) # operation system
-                    server_ttl_list.append(server_ttl)
-                    break
-                else:
-                    protocol_address_list.append(response_packet.getlayer(IP).src) # ip address
-                    operation_system, server_ttl = self.probe_operation_system(response_packet.getlayer(IP).ttl,
-                                                                             total_node_count)
-                    operation_system_list.append(operation_system) # operation system
-                    server_ttl_list.append(server_ttl)
-            else:
-                protocol_address_list.append("Unknown")
-                operation_system_list.append("Unknown")
-                server_ttl_list.append("Unknown")
-        return total_node_count, protocol_address_list, operation_system_list, server_ttl_list, \
-               self.probe_node_location(total_node_count, protocol_address_list)
-    """
