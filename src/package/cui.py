@@ -157,14 +157,21 @@ class Cui:
     def parsing_interfaces_name(self, _string):
         _string = str(_string)
         key = 0
+        key_key = 0
         interfaces = ""
         for i in range(0, len(_string)):
             if (_string[i] == "]"):
-                key = 0
+                if (key == 1) and (key_key == 1):
+                    key_key = 0
+                else:
+                    key = 0
             if (key == 1):
                 interfaces = interfaces + _string[i]
             if (_string[i] == "["):
-               key = 1
+                if (key == 1):
+                    key_key = 1
+                else:
+                    key = 1
         return interfaces
 
     def print_interfaces_list(self):
