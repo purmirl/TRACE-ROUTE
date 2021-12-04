@@ -3,15 +3,16 @@
  . Python Project Structure Repository;
 
  Probe Arrow Project (Advanced Trace Route) by PeTrA. 2020~
- ProbeArrow 1.0
- Language : Python3.8.2 on pycharm IDE
- Library : Scapy2.4.3
- API : IP Geo Location [geoplugin.net] --> http://www.geoplugin.net/json
- ------
+ ProbeArrow - version 2021.12.01
+  . base of Python3.8.2 on pycharm IDE, Scapy2.4.3
+  . using API : IP Geo Location [geoplugin.net] --> http://www.geoplugin.net/json
+  . package is here --> https://github.com/purmirl/ProbeArrow
+
  @ cui.py
     * ProbeArrow/src/package/cui.py
     * console user interface code file
 """
+
 from scapy.arch import IFACES
 from src.package import probe
 from src.package.function import is_protocol_address
@@ -36,52 +37,52 @@ class Cui:
     def cui_engine(self):
         self.print_rights()
         while True:
-            HIVE_MAIN_COMMAND = self.get_command("main")
-            if HIVE_MAIN_COMMAND == "?":
+            cui_main_command = self.get_command("main")
+            if cui_main_command == "?":
                 self.print_main_option()
                 continue
-            elif HIVE_MAIN_COMMAND == "traceroute":
+            elif cui_main_command == "traceroute":
                 self.print_move_comments("main", "traceroute")
                 while True:
-                    HIVE_TRACEROUTE_COMMAND = self.get_command("traceroute")
-                    if HIVE_TRACEROUTE_COMMAND == "?":
+                    cui_traceroute_command = self.get_command("traceroute")
+                    if cui_traceroute_command == "?":
                         self.print_traceroute_option()
                         continue
-                    elif HIVE_TRACEROUTE_COMMAND == "":
+                    elif cui_traceroute_command == "":
                         continue
-                    elif HIVE_TRACEROUTE_COMMAND == "quit":
+                    elif cui_traceroute_command == "quit":
                         self.print_move_comments("traceroute", "main")
                         break
                     else:  # something is put.
-                        is_ip_address = is_protocol_address(HIVE_TRACEROUTE_COMMAND)
+                        is_ip_address = is_protocol_address(cui_traceroute_command)
                         # print(is_ip_address)
                         if is_ip_address == 0:  # not ip address
                             self.print_ip_error()
                             continue
                         interface = self.config_set_interfaces()
-                        self.run_traceroute(HIVE_TRACEROUTE_COMMAND, 30, 0, 3, interface)  # trace route engine start
+                        self.run_traceroute(cui_traceroute_command, 30, 0, 3, interface)  # trace route engine start
                         continue
                     continue
                 continue
-            elif HIVE_MAIN_COMMAND == "show":
+            elif cui_main_command == "show":
                 self.print_move_comments("main", "show")
                 while True:
-                    HIVE_SHOW_COMMAND = self.get_command("show")
-                    if HIVE_SHOW_COMMAND == "?":
+                    cui_show_command = self.get_command("show")
+                    if cui_show_command == "?":
                         self.print_show_option()
                         continue
-                    elif HIVE_SHOW_COMMAND == "version":
+                    elif cui_show_command == "version":
                         # print software version
                         self.print_software_version()
                         continue
-                    elif HIVE_SHOW_COMMAND == "quit":
+                    elif cui_show_command == "quit":
                         self.print_move_comments("show", "main")
                         break
                     else:
                         continue
                     continue
                 continue
-            elif HIVE_MAIN_COMMAND == "exit":
+            elif cui_main_command == "exit":
                 break
         return
 
@@ -94,66 +95,78 @@ class Cui:
             exit
     """
     def print_main_option(self):
-        MAIN_OPTION = "\n" \
+        main_option = "\n" \
                       " 01. traceroute : start trace route \n" \
                       " 02. show : show program status \n" \
                       " 03. exit : program exit \n" \
                       ""
-        print(MAIN_OPTION)
+        print(main_option)
         return
 
     """ @show option
             version
     """
     def print_show_option(self):
-        SHOW_OPTION = "\n" \
+        show_option = "\n" \
                       " 01. version : show software version \n" \
                       " 02. quit : quit show option \n" \
                       ""
-        print(SHOW_OPTION)
+        print(show_option)
         return
 
     """ @traceroute option
             [traget ip address]
     """
     def print_traceroute_option(self):
-        TRACEROUTE_OPTION = "\n" \
+        traceroute_option = "\n" \
                             " 01. [target ip address] : write target ip address for search \n" \
                             " 02. quit : quit traceroute option \n" \
                             ""
-        print(TRACEROUTE_OPTION)
+        print(traceroute_option)
         return
 
+    """ @print ip error
+    """
     def print_ip_error(self):
-        IP_ERROR_STRING = "\n" \
+        ip_error_string = "\n" \
                           " This is not Internet Protocol address. \n" \
                           ""
-        print(IP_ERROR_STRING)
+        print(ip_error_string)
         return
 
+    """ @print software version
+    """
     def print_software_version(self):
-        SOFTWARE_VERSION_STRING = "\n" \
-                                  " ProbeArrow v 21.11.01 by PeTrA. 2021.NOVEMBER Updated.\n" \
+        software_version_string = "\n" \
+                                  " ProbeArrow v 2021.12.01 by PeTrA. 2021.DECEMBER Updated.\n" \
                                   ""
-        print(SOFTWARE_VERSION_STRING)
+        print(software_version_string)
         return
 
+    """ @print rights
+    """
     def print_rights(self):
         print("Copyright 2020~ PeTrA. All rights reserved.")
         print("ProbeArrow 1.0\n")
         return
 
+    """ print move comments
+    """
     def print_move_comments(self, _from, _to):
-        MOVE_COMMENTS_STRING = "\n" \
+        move_comments_string = "\n" \
                                " move from " + str(_from) + " to " + str(_to) + "\n"
-        print(MOVE_COMMENTS_STRING)
+        print(move_comments_string)
         return
 
+    """ get command
+    """
     def get_command(self, _layer_name):
         result = ""
         result = input(_layer_name + "@probearrow:~# ")
         return result
 
+    """ @parsing interfaces name
+    """
     def parsing_interfaces_name(self, _string):
         _string = str(_string)
         key = 0
@@ -174,6 +187,8 @@ class Cui:
                     key = 1
         return interfaces
 
+    """ @print interfaces list
+    """
     def print_interfaces_list(self):
         interfaces_list = list((IFACES.data).values())
         for i in range(0, len(interfaces_list)):
@@ -182,6 +197,8 @@ class Cui:
         print()
         return
 
+    """ @set interfaces
+    """
     def set_interfaces(self, _index):
         interfaces_list = list((IFACES.data).values())
         interfaces = ""
@@ -192,12 +209,14 @@ class Cui:
         result = interfaces
         return result
 
+    """ @config set interfaces
+    """
     def config_set_interfaces(self):
-        COMMENTS = "\n" \
+        comments = "\n" \
                    " select internet interface ↓" \
                    "\n" \
                    ""
-        print(COMMENTS)
+        print(comments)
         self.print_interfaces_list()
         index = ""
         index = input(" interface number : ")
@@ -225,45 +244,3 @@ class Cui:
         probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
                                                    _traceroute_verbose, _traceroute_timeout, _traceroute_interface)
         return
-
-""" @cui run traceroute function. backup - 20211021
-    def run_traceroute(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                       _traceroute_verbose, _traceroute_timeout, _traceroute_interface):
-        print()
-        print(" traceroute operation proceeding...")
-        print()
-        start_time = timeit.default_timer()
-        probe_traceroute_instance = probe.Probe()
-        result_protocol_address_list, result_system_operation_list, result_total_node_count, result_node_location, result_server_ttl_list = \
-            probe_traceroute_instance.probe_engine(_traceroute_target_protocol_address, _traceroute_max_ttl,
-                                                   _traceroute_verbose, _traceroute_timeout, _traceroute_interface)
-        result = "\n"
-        for i in range(0, result_total_node_count):
-            result = result + " node " + str(i + 1) + " : " + str(result_protocol_address_list[i]) + \
-                     " ( OS : " + str(result_system_operation_list[i]) + " )" + " ( GEO : " + str(result_node_location[i]) + " )" + " ( TTL : " + str(result_server_ttl_list[i]) + " )\n"
-        end_time = timeit.default_timer()
-        result = result + "\n" + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds)\n" \
-                                                                                                          " Total nodes : " + str(
-            result_total_node_count) + "\n"
-        # print(result)
-        return
-"""
-""" @demo trace route function. back up - 20210516
-    def run_traceroute_demo(self, _traceroute_target_protocol_address, _traceroute_max_ttl,
-                            _traceroute_verbose, _traceroute_timeout):
-        start_time = timeit.default_timer()
-        probe_traceroute_instance = probe.Probe()
-        result_protocol_address_list, result_system_operation_list, result_total_node_count = \
-            probe_traceroute_instance.probe_demo(_traceroute_target_protocol_address, _traceroute_max_ttl,
-                                                 _traceroute_verbose, _traceroute_timeout)
-        result = "\n"
-        for i in range(0, result_total_node_count):
-            result = result + " node " + str(i + 1) + " : " + str(result_protocol_address_list[i]) + \
-                     " ( " + str(result_system_operation_list[i]) + " )\n"
-        end_time = timeit.default_timer()
-        result = result + "\n" + " probe engine terminated (probe time : " + str(end_time - start_time) + " seconds)\n" \
-                                                                                                          " Total nodes : " + str(
-            result_total_node_count) + "\n"
-        print(result)
-        return
-"""
