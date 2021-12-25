@@ -9,7 +9,7 @@
  API : IP Geo Location [geoplugin.net] --> http://www.geoplugin.net/json
  ------
  @ main.py
-    * ProbeArrow/src/package/main.py
+    * ProbeArrow/main.py
     * main function code file
 """
 
